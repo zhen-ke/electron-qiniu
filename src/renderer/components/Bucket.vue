@@ -25,7 +25,6 @@
 
 <script>
 import qiniu from "qiniu";
-import Util from "./../utils/util";
 import { clipboard } from "electron";
 
 export default {

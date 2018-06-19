@@ -62,6 +62,7 @@ function createBucket() {
   bucketWindow.on('closed', () => {
     bucketWindow = null
   })
+
 }
 
 app.on('ready', () => {

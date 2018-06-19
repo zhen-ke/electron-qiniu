@@ -17,14 +17,13 @@
 
 <script>
 import qiniu from "qiniu";
-import Util from "./../utils/util";
 
 export default {
   data() {
     return {
       mac: {
-        accessKey: "",
-        secretKey: ""
+        accessKey: "3sBXpWawR0hxP6Xxot3S8VaqiB43HjDP7QF3Ua_e",
+        secretKey: "CcgGrLZ9FY2N8jgpTehCQ9lPl3N4KJOs75zQiscZ"
       },
       AccessToken: ''
     };
