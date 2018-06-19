@@ -62,7 +62,6 @@ function createBucket() {
   bucketWindow.on('closed', () => {
     bucketWindow = null
   })
-
 }
 
 app.on('ready', () => {
@@ -77,15 +76,26 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', () => {
-  if (mainWindow === null) {
+  if (mainWindow === null && bucketWindow === null) {
     createWindow()
+    createBucket()
   }
 })
 
 ipcMain.on('bucketsList', (evt, data) => {
-  // mainWindow.hide()
+  mainWindow.close()
   bucketWindow.show()
   bucketWindow.webContents.send('msg', data)
+});
+
+ipcMain.on('status', (evt, data) => {
+  if (data) {
+    mainWindow.close()
+    bucketWindow.show()
+  } else {
+    createWindow()
+    createBucket()
+  }
 });
 /**
  * Auto Updater

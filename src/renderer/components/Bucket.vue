@@ -7,7 +7,7 @@
       </el-select>
     </div>
     <div class="bucket-upload">
-      <el-upload class="upload" drag :action="action" :on-success='handleAvatarSuccess' :on-error="handleError" :before-upload="beforeAvatarUpload" :data="postData" multiple>
+      <el-upload class="upload" drag :action="action" :on-success='handleSuccess' :on-error="handleError" :before-upload="beforeUpload" :data="postData" :show-file-list="false" multiple>
         <img v-if="img" :src="img">
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或
@@ -75,16 +75,16 @@ export default {
         })
         .catch(e => {});
     },
-    handleAvatarSuccess(res, file) {
+    handleSuccess(res, file) {
       // 上传成功后在图片框显示图片
       this.img = "http://" + this.url + "/" + res.key;
-      console.log(res);
+      this.$message.success("上传成功");
     },
     handleError(res) {
       // 显示错误
-      console.log(res);
+      this.$message.error("上传失败");
     },
-    beforeAvatarUpload(file) {
+    beforeUpload(file) {
       // 在图片提交前进行验证
       const isRightType =
         file.type === "image/jpeg" ||
@@ -131,11 +131,16 @@ export default {
     }
   },
   mounted() {
-    this.$electron.ipcRenderer.on("msg", (event, files) => {
-      this.getBuckets(files);
-      this.mac = files.mac;
-      localStorage.obj = JSON.stringify(files);
-    });
+    let login = JSON.parse(localStorage.obj || "null");
+    if (login) {
+      this.getBuckets(login);
+      this.mac = login.mac;
+    } else {
+      this.$electron.ipcRenderer.on("msg", (event, files) => {
+        this.getBuckets(files);
+        this.mac = files.mac;
+      });
+    }
   },
   watch: {
     value(val, oldVal) {

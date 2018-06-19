@@ -47,12 +47,22 @@ export default {
               }
             };
             this.$electron.ipcRenderer.send("bucketsList", data);
+            localStorage.obj = JSON.stringify(data);
           }
         })
         .catch(e => {
           console.log("accessKey 或者 secretKey 错误");
         });
+    },
+    checkLogin() {
+      let login = JSON.parse(localStorage.obj || 'null')
+      if(login) {
+        this.$electron.ipcRenderer.send("status", true)
+      }
     }
+  },
+  created() {
+    this.checkLogin()
   },
   mounted() {
     this.AccessToken = qiniu.util.generateAccessToken(this.mac,"http://rs.qbox.me/buckets")

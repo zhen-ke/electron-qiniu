@@ -1,6 +1,6 @@
 {
   "name": "qiniu",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "'zhen-ke' <cool420984@gmail.com>",
   "description": "electron-vue 七牛客户端",
   "license": null,
