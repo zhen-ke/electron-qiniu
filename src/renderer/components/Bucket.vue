@@ -1,31 +1,26 @@
 <template>
-  <div class="bucket" v-if="options.length">
-    <div class="bucket-select">
-      <el-select v-model="value" placeholder="请选择空间">
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-    </div>
-    <div class="bucket-upload">
-      <el-upload class="upload" drag :action="action" :on-success='handleSuccess' :on-error="handleError" :before-upload="beforeUpload" :data="postData" :show-file-list="false" multiple>
-        <img v-if="img" :src="img">
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或
-          <em>点击上传</em>
+  <section>
+    <header style="-webkit-app-region: drag"></header>
+    <div class="bucket" v-if="options.length" style="-webkit-app-region: no-drag">
+      <div class="bucket-select">
+        <el-select v-model="value" placeholder="请选择空间" size="small">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+        <div class="quit" @click="quit">
+          <img src="../assets/icon_quit.svg" alt="quit">
         </div>
-        <div class="el-upload__tip" slot="tip">只能上传jpg/png/gif文件，且不超过5M</div>
-      </el-upload>
+      </div>
+      <List :bucket="value" :mac="mac" :url="url" :postData="postData" :action="action"></List>
     </div>
-    <p class="bucket-img" v-if="img">图片地址：
-      <span>{{img}}</span>
-      <button type="button" class="copy" @click="copyText(img)">复制</button>
-    </p>
-  </div>
+  </section>
 </template>
 
 <script>
 import qiniu from "qiniu";
 import { clipboard } from "electron";
+import List from "@/components/Manage/List";
+import Upload from "@/components/Upload";
 
 export default {
   data() {
@@ -43,6 +38,10 @@ export default {
     };
   },
   methods: {
+    quit() {
+      localStorage.removeItem("obj");
+      this.$electron.ipcRenderer.send("status", false);
+    },
     getBuckets(msg) {
       let list = msg || JSON.parse(localStorage.obj || "[]");
       if (list.buckets) {
@@ -73,32 +72,9 @@ export default {
             console.log(this.url);
           }
         })
-        .catch(e => {});
-    },
-    handleSuccess(res, file) {
-      // 上传成功后在图片框显示图片
-      this.img = "http://" + this.url + "/" + res.key;
-      this.$message.success("上传成功");
-    },
-    handleError(res) {
-      // 显示错误
-      this.$message.error("上传失败");
-    },
-    beforeUpload(file) {
-      // 在图片提交前进行验证
-      const isRightType =
-        file.type === "image/jpeg" ||
-        file.type === "image/png" ||
-        file.type === "image/gif";
-      const isLt2M = file.size / 1024 / 1024 < 50;
-
-      if (!isRightType) {
-        this.$message.error("上传头像图片只能是 JPG/PNG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 5MB!");
-      }
-      return isRightType && isLt2M;
+        .catch(e => {
+          this.$message.error("网络错误");
+        });
     },
     getZoneInfo(val) {
       // 获取上传空间的空间区域
@@ -112,9 +88,10 @@ export default {
       // 获取上传Token
       var options = {
         scope: val,
-        expires: new Date().getTime() + 3600,
+        expires: new Date().getTime() + 3600, // 一个小时后过期
+        saveKey: `$(fname)`, // 默认使用文件名作为图片的名称
         returnBody:
-          '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
+          '{"fname":"$(fname)","key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}'
       };
       var putPolicy = new qiniu.rs.PutPolicy(options);
       return putPolicy.uploadToken(this.mac);
@@ -141,6 +118,14 @@ export default {
         this.mac = files.mac;
       });
     }
+    // let bucket = JSON.parse(localStorage.obj || "[]");
+    // let value = bucket.buckets[0];
+    // this.postData.token = this.getUploadToken(this.value);
+    // this.AccessToken = this.getAccessToken(value);
+    // this.getZoneInfo(value);
+    // this.getBucketList("http://api.qiniu.com/v6/domain/list", value);
+    // this.value = value
+    // console.log(this.value,value)
   },
   watch: {
     value(val, oldVal) {
@@ -149,25 +134,37 @@ export default {
       this.getZoneInfo(val);
       this.getBucketList("http://api.qiniu.com/v6/domain/list", val);
     }
+  },
+  components: {
+    List,
+    Upload
   }
 };
 </script>
 
 <style lang="scss" scoped>
+header {
+  height: 25px;
+}
 .bucket {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
+  padding: 20px;
+  // position: absolute;
+  // top: 50%;
+  // left: 50%;
+  // transform: translate(-50%, -50%);
+  // text-align: center;
   .bucket-select {
-    margin-bottom: 50px;
-  }
-  .bucket-upload {
-    margin-bottom: 50px;
-    img {
-      width: 100%;
-      height: auto;
+    margin-bottom: 10px;
+    position: relative;
+    .quit {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 25px;
+      img {
+        width: 100%;
+        height: auto;
+      }
     }
   }
   .bucket-img {

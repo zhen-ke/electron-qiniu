@@ -1,18 +1,21 @@
 <template>
-  <div class="form">
-    <form>
-      <h2 class="title">登录</h2>
-      <div class="form-group">
-        <!-- <label for="AccessKey">AccessKey</label> -->
-        <input type="password" class="form-control" id="AccessKey" v-model="mac.accessKey" placeholder="AccessKey">
-      </div>
-      <div class="form-group">
-        <!-- <label for="SecretKey">SecretKey</label> -->
-        <input type="password" class="form-control" id="SecretKey" v-model="mac.secretKey" placeholder="SecretKey">
-      </div>
-      <button type="submit" class="btn btn-default" @click.prevent="getBucket">确定</button>
-    </form>
-  </div>
+  <section>
+    <header style="-webkit-app-region: drag"></header>
+    <div class="form">
+      <form>
+        <h2 class="title">登录</h2>
+        <div class="form-group">
+          <!-- <label for="AccessKey">AccessKey</label> -->
+          <input type="password" class="form-control" id="AccessKey" v-model="mac.accessKey" placeholder="AccessKey">
+        </div>
+        <div class="form-group">
+          <!-- <label for="SecretKey">SecretKey</label> -->
+          <input type="password" class="form-control" id="SecretKey" v-model="mac.secretKey" placeholder="SecretKey">
+        </div>
+        <button type="submit" class="btn btn-default" @click.prevent="getBucket">确定</button>
+      </form>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -25,53 +28,60 @@ export default {
         accessKey: "3sBXpWawR0hxP6Xxot3S8VaqiB43HjDP7QF3Ua_e",
         secretKey: "CcgGrLZ9FY2N8jgpTehCQ9lPl3N4KJOs75zQiscZ"
       },
-      AccessToken: ''
+      AccessToken: ""
     };
   },
   methods: {
     getBucket() {
-      let config = {
-        headers: {
-          Authorization: this.AccessToken
-        }
-      };
-      this.myAxios
-        .get("http://rs.qbox.me/buckets", config)
-        .then(it => {
-          if (it.data.length) {
-            let data = {
-              buckets: it.data,
-              mac: {
-                accessKey: this.mac.accessKey,
-                secretKey: this.mac.secretKey
-              }
-            };
-            this.$electron.ipcRenderer.send("bucketsList", data);
-            localStorage.obj = JSON.stringify(data);
+      if (this.mac.accessKey === "" || this.mac.secretKey === "") {
+        this.$message.error("accessKey/secretKey不能为空");
+      } else {
+        this.AccessToken = qiniu.util.generateAccessToken(
+          this.mac,
+          "http://rs.qbox.me/buckets"
+        );
+        let config = {
+          headers: {
+            Authorization: this.AccessToken
           }
-        })
-        .catch(e => {
-          console.log("accessKey 或者 secretKey 错误");
-        });
+        };
+        this.myAxios
+          .get("http://rs.qbox.me/buckets", config)
+          .then(it => {
+            if (it.data.length) {
+              let data = {
+                buckets: it.data,
+                mac: {
+                  accessKey: this.mac.accessKey,
+                  secretKey: this.mac.secretKey
+                }
+              };
+              this.$electron.ipcRenderer.send("bucketsList", data);
+              localStorage.obj = JSON.stringify(data);
+            }
+          })
+          .catch(e => {
+            this.$message.error("accessKey 或者 secretKey 错误");
+          });
+      }
     },
     checkLogin() {
-      let login = JSON.parse(localStorage.obj || 'null')
-      if(login) {
-        this.$electron.ipcRenderer.send("status", true)
+      let login = JSON.parse(localStorage.obj || "null");
+      if (login) {
+        this.$electron.ipcRenderer.send("status", true);
       }
     }
   },
   created() {
-    this.checkLogin()
-  },
-  mounted() {
-    this.AccessToken = qiniu.util.generateAccessToken(this.mac,"http://rs.qbox.me/buckets")
-    console.log(qiniu)
+    this.checkLogin();
   }
 };
 </script>
 
 <style>
+header {
+  height: 25px;
+}
 .form form {
   width: 300px;
   margin: 0 auto;

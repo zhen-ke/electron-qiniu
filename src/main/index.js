@@ -29,7 +29,8 @@ function createWindow() {
     height: 500,
     useContentSize: true,
     width: 350,
-    // resizable: false,
+    titleBarStyle: 'hidden',
+    resizable: false,
     webPreferences: {
       webSecurity: false
     }
@@ -47,16 +48,16 @@ function createBucket() {
    * Initial window options
    */
   bucketWindow = new BrowserWindow({
-    height: 500,
+    height: 650,
     useContentSize: true,
-    width: 800,
+    width: 980,
     show: false,
-    // resizable: false,
+    titleBarStyle: 'hidden',
+    resizable: false,
     webPreferences: {
       webSecurity: false
     }
   })
-
   bucketWindow.loadURL(bucketURL)
 
   bucketWindow.on('closed', () => {
@@ -80,6 +81,7 @@ app.on('activate', () => {
     createWindow()
     createBucket()
   }
+
 })
 
 ipcMain.on('bucketsList', (evt, data) => {
@@ -93,8 +95,7 @@ ipcMain.on('status', (evt, data) => {
     mainWindow.close()
     bucketWindow.show()
   } else {
-    createWindow()
-    createBucket()
+    app.quit()
   }
 });
 /**
