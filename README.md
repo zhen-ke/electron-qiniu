@@ -8,6 +8,7 @@
 
 ![screenshot](./screenshot-01.png)
 ![screenshot](./screenshot-02.png)
+![screenshot](./screenshot-03.png)
 
 ### 构建应用
 
