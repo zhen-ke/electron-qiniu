@@ -53,11 +53,13 @@
   "dependencies": {
     "axios": "^0.16.1",
     "element-ui": "^2.2.2",
+    "node-sass": "^4.9.0",
     "qiniu": "^7.1.1",
     "sass-loader": "^7.0.3",
-    "vue": "^2.3.3",
+    "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
-    "vue-router": "^2.5.3"
+    "vue-router": "^2.5.3",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
@@ -88,9 +90,9 @@
     "vue-html-loader": "^1.2.4",
     "vue-loader": "^13.0.5",
     "vue-style-loader": "^3.0.1",
-    "vue-template-compiler": "^2.4.2",
     "webpack": "^3.5.2",
     "webpack-dev-server": "^2.7.1",
-    "webpack-hot-middleware": "^2.18.2"
+    "webpack-hot-middleware": "^2.18.2",
+    "vue-template-compiler": "^2.5.16"
   }
 }
