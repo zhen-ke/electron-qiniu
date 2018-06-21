@@ -12,7 +12,7 @@
           <!-- <label for="SecretKey">SecretKey</label> -->
           <input type="password" class="form-control" id="SecretKey" v-model="mac.secretKey" placeholder="SecretKey">
         </div>
-        <button type="submit" class="btn btn-default" @click.prevent="getBucket">确定</button>
+        <el-button type="primary" @click.prevent="getBucket" size="small" class="btn">确定</el-button>
       </form>
     </div>
   </section>
@@ -78,7 +78,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 header {
   height: 25px;
 }
@@ -90,7 +90,7 @@ header {
   left: 50%;
   position: absolute;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 6px 0px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
   padding: 30px;
 }
@@ -100,7 +100,7 @@ header {
   font-size: 18px;
   line-height: 26px;
   margin-bottom: 15px;
-  color: #007af5;
+  color: #409EFF;
 }
 
 .form-group {
@@ -124,10 +124,8 @@ label {
   color: #555;
   background-color: #fff;
   background-image: none;
-  border: 1px solid #ccc;
+  border: 1px solid #D7DAE2;
   border-radius: 4px;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -webkit-transition: border-color ease-in-out 0.15s,
     -webkit-box-shadow ease-in-out 0.15s;
   -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
@@ -135,28 +133,18 @@ label {
 }
 
 .btn {
-  display: inline-block;
-  padding: 6px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1.42857143;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: middle;
-  -ms-touch-action: manipulation;
-  touch-action: manipulation;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  background-image: none;
-  border: 0;
-  border-radius: 4px;
-  color: #fff;
-  background-color: #007af5;
-  border-color: #ccc;
   width: 100%;
+}
+::-webkit-input-placeholder { /* WebKit browsers */
+    color:    #D7DAE2;
+}
+:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color:    #D7DAE2;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color:    #D7DAE2;
+}
+:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color:    #D7DAE2;
 }
 </style>
