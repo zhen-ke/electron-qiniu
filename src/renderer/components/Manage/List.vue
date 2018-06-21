@@ -228,6 +228,12 @@ export default {
       }
     }
   },
+  mounted() {
+    if (this.bucket) {
+      this.AccessToken = this.getAccessToken(this.bucket);
+      this._getData();
+    }
+  },
   watch: {
     bucket(newVal, oldVal) {
       console.log(newVal);

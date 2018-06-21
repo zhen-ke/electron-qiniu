@@ -112,20 +112,16 @@ export default {
     if (login) {
       this.getBuckets(login);
       this.mac = login.mac;
+      let value = login.buckets[0];
+      this.value = value;
     } else {
       this.$electron.ipcRenderer.on("msg", (event, files) => {
         this.getBuckets(files);
         this.mac = files.mac;
+        let value = files.buckets[0];
+        this.value = value;
       });
     }
-    // let bucket = JSON.parse(localStorage.obj || "[]");
-    // let value = bucket.buckets[0];
-    // this.postData.token = this.getUploadToken(this.value);
-    // this.AccessToken = this.getAccessToken(value);
-    // this.getZoneInfo(value);
-    // this.getBucketList("http://api.qiniu.com/v6/domain/list", value);
-    // this.value = value
-    // console.log(this.value,value)
   },
   watch: {
     value(val, oldVal) {
