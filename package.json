@@ -17,7 +17,7 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "qiniu",
+    "productName": "七牛",
     "appId": "org.simulatedgreg.electron-vue",
     "directories": {
       "output": "build"
