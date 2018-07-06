@@ -30,16 +30,6 @@ export default {
       this.$emit("onData");
     },
     cancel(msg) {
-      // let type = msg.type;
-      // switch (type) {
-      //   case "on": {
-      //     this.$emit("upData", { ...this.editData });
-      //     break;
-      //   }
-      //   case "off": {
-      //     break;
-      //   }
-      // }
       this.$store.commit({
         type: "ADD_IMAGE",
         data: false

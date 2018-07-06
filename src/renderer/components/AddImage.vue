@@ -6,7 +6,6 @@
 export default {
   methods: {
     add() {
-      console.log(111)
       this.$store.commit({
         type: "ADD_IMAGE",
         data: true

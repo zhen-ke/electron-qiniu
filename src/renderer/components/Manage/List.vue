@@ -30,7 +30,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog :title="title" :visible.sync="dialogFormVisible">
+    <el-dialog :title="title" :visible.sync="dialogFormVisible" @close="close">
       <Dialog :url="url" :postData="postData" :action="action" @onData="updateData"></Dialog>
     </el-dialog>
     <!-- <div class="pagination">
@@ -82,6 +82,12 @@ export default {
     };
   },
   methods: {
+    close() {
+      this.$store.commit({
+        type: "ADD_IMAGE",
+        data: false
+      });
+    },
     getAccessToken(val) {
       // 获取认证Token
       return qiniu.util.generateAccessToken(
@@ -242,7 +248,6 @@ export default {
       }
     },
     bucket(newVal, oldVal) {
-      console.log(newVal);
       if (newVal) {
         this.AccessToken = this.getAccessToken(newVal);
         this._getData();
