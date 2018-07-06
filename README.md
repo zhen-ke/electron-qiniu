@@ -6,9 +6,10 @@
 
 ### 项目截图
 
-![screenshot](./screenshot-01.png)
-![screenshot](./screenshot-02.png)
-![screenshot](./screenshot-03.png)
+![screenshot1](./screenshot-01.png)
+![screenshot2](./screenshot-02.png)
+![screenshot3](./screenshot-03.png)
+![screenshot4](./screenshot-04.png)
 
 ### 构建应用
 
