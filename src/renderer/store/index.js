@@ -1,11 +1,21 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-import modules from './modules'
-
 Vue.use(Vuex)
 
-export default new Vuex.Store({
-  modules,
-  strict: process.env.NODE_ENV !== 'production'
+const store = new Vuex.Store({
+  state: {
+    visible: false
+  },
+  mutations: {
+    ADD_IMAGE(state, payload) {
+      state.visible = payload.data
+    },
+  },
+  actions: {
+  },
+  getters: {
+  }
 })
+
+export default store

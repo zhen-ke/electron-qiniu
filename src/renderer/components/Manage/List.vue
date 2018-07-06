@@ -1,16 +1,6 @@
 <template>
   <div class="privileges-table">
-    <div class="table-hd">
-      <el-row :gutter="20">
-        <el-col :span="2">
-          <Addbtn @addData="add"></Addbtn>
-        </el-col>
-        <el-col :span="6" :offset="16">
-          <Search @changeSearch="updateSearch"></Search>
-        </el-col>
-      </el-row>
-    </div>
-    <el-table :data="filterTableData" style="width: 100%" v-loading="loading">
+    <el-table :data="filterTableData" style="width: 100%" v-loading="loading" max-height="590" size="small">
       <el-table-column prop="key" label="文件名" sortable>
       </el-table-column>
       <el-table-column prop="type" label="文件类型" sortable>
@@ -41,7 +31,7 @@
       </el-table-column>
     </el-table>
     <el-dialog :title="title" :visible.sync="dialogFormVisible">
-      <Dialog :url="url" :postData="postData" :action="action" @change="changeStatus" @onData="updateData"></Dialog>
+      <Dialog :url="url" :postData="postData" :action="action" @onData="updateData"></Dialog>
     </el-dialog>
     <!-- <div class="pagination">
       <Pagination></Pagination>
@@ -53,10 +43,8 @@
 import qiniu from "qiniu";
 import { clipboard } from "electron";
 import Dialog from "@/components/Manage/Dialog";
-import Search from "@/components/Manage/Search";
-import Addbtn from "@/components/Manage/AddBtn";
 import Pagination from "@/components/Manage/Pagination";
-
+import { mapState } from "vuex";
 export default {
   props: {
     bucket: {
@@ -157,15 +145,28 @@ export default {
       }
     },
     handleDelete(index, row) {
-      this.$delete(this.tableData, index, this.tableData[index]);
-      let entry = `${this.bucket}:${row.key}`;
-      let encodedEntryURI = qiniu.util.urlsafeBase64Encode(entry);
-      this.delete(encodedEntryURI);
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$delete(this.tableData, index, this.tableData[index]);
+          let entry = `${this.bucket}:${row.key}`;
+          let encodedEntryURI = qiniu.util.urlsafeBase64Encode(entry);
+          this.delete(encodedEntryURI);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
-    changeStatus(data) {
-      this.dialogFormVisible = data;
-      this.addStatus = false;
-    },
+    // changeStatus(data) {
+    //   this.dialogFormVisible = data;
+    //   this.addStatus = false;
+    // },
     updateData(msg) {
       this._getData();
     },
@@ -207,17 +208,12 @@ export default {
           this.$message.error("网络错误");
         });
     },
-    add(msg) {
-      this.dialogFormVisible = msg;
-      // this.rowList = {};
-      this.title = "上传图片";
-      this.addStatus = true;
-    },
     updateSearch(msg) {
       this.search = msg;
     }
   },
   computed: {
+    ...mapState(["visible"]),
     filterTableData() {
       if (this.search.length > 0) {
         return this.tableData.filter(it => {
@@ -235,6 +231,16 @@ export default {
     }
   },
   watch: {
+    visible(newVal, oldVal) {
+      if (newVal) {
+        this.dialogFormVisible = true;
+        this.title = "上传图片";
+        this.addStatus = true;
+      } else {
+        this.dialogFormVisible = false;
+        this.addStatus = false;
+      }
+    },
     bucket(newVal, oldVal) {
       console.log(newVal);
       if (newVal) {
@@ -245,8 +251,6 @@ export default {
   },
   components: {
     Dialog,
-    Search,
-    Addbtn,
     Pagination
   }
 };

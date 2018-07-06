@@ -27,7 +27,7 @@ export default {
   },
   methods: {
     updatedUpload() {
-      this.$emit('onData')
+      this.$emit("onData");
     },
     cancel(msg) {
       // let type = msg.type;
@@ -40,7 +40,10 @@ export default {
       //     break;
       //   }
       // }
-      this.$emit("change", false);
+      this.$store.commit({
+        type: "ADD_IMAGE",
+        data: false
+      });
     }
   },
   components: {

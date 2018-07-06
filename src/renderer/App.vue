@@ -223,7 +223,7 @@
   html,
   body {
     min-height: 100%;
-    background: #F7F9FA;
+    background: #fff;
 
   }
 

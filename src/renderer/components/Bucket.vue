@@ -1,18 +1,32 @@
 <template>
   <section>
-    <header style="-webkit-app-region: drag"></header>
-    <div class="bucket" v-if="options.length" style="-webkit-app-region: no-drag">
-      <div class="bucket-select">
-        <el-select v-model="value" placeholder="请选择空间" size="small">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
+    <el-container>
+      <el-header style="-webkit-app-region: drag">
+        <h1 class="logo">
+          <img src="../../../static/image/logo.png" alt="logo">
+        </h1>
         <div class="quit" @click="quit">
-          <img src="../assets/icon_quit.svg" alt="quit">
+          <img src="../../../static/image/quit.svg" alt="quit">
         </div>
-      </div>
-      <List :bucket="value" :mac="mac" :url="url" :postData="postData" :action="action"></List>
-    </div>
+        <AddImage class="addimg"></AddImage>
+      </el-header>
+      <el-container>
+        <el-aside width="200px">
+          <h4 class="title">存储空间列表</h4>
+          <el-menu default-active="0" class="el-menu-vertical-demo">
+            <el-menu-item :index="''+index" v-for="(item,index) in options" :key="index" @click="value = item.value">
+              <i class="icon"></i>
+              <span slot="title">{{item.value}}</span>
+            </el-menu-item>
+          </el-menu>
+        </el-aside>
+        <el-main>
+          <div class="bucket" v-if="options.length" style="-webkit-app-region: no-drag">
+            <List :bucket="value" :mac="mac" :url="url" :postData="postData" :action="action"></List>
+          </div>
+        </el-main>
+      </el-container>
+    </el-container>
   </section>
 </template>
 
@@ -21,6 +35,7 @@ import qiniu from "qiniu";
 import { clipboard } from "electron";
 import List from "@/components/Manage/List";
 import Upload from "@/components/Upload";
+import AddImage from "@/components/AddImage";
 
 export default {
   data() {
@@ -133,35 +148,98 @@ export default {
   },
   components: {
     List,
-    Upload
+    Upload,
+    AddImage
   }
 };
 </script>
 
 <style lang="scss" scoped>
-header {
-  height: 25px;
-}
-.bucket {
-  padding: 20px;
-  // position: absolute;
-  // top: 50%;
-  // left: 50%;
-  // transform: translate(-50%, -50%);
-  // text-align: center;
-  .bucket-select {
-    margin-bottom: 10px;
+.el-container {
+  height: 650px;
+  .el-header {
+    background-color: #409eff;
+    color: #fff;
     position: relative;
+    .logo {
+      width: 125px;
+      height: 29px;
+      margin-top: 22px;
+      img {
+        width: 100%;
+        height: auto;
+        vertical-align: top;
+      }
+    }
     .quit {
       position: absolute;
-      top: 0;
-      right: 0;
-      width: 25px;
+      bottom: 20px;
+      right: 20px;
+      width: 20px;
       img {
         width: 100%;
         height: auto;
       }
     }
+    .addimg {
+      position: absolute;
+      left: 200px;
+      bottom: 20px;
+    }
+  }
+  .el-aside {
+    border-right: solid 1px #EBEEF5;
+    background: #fff;
+    .title {
+      font-weight: normal;
+      font-size: 12px;
+      padding: 10px;
+      color: #909399;
+    }
+    span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-wrap: normal;
+      display: inline-block;
+      width: 130px;
+    }
+    .icon {
+      background: url("../../../static/image/data.png") no-repeat;
+      width: 18px;
+      height: 18px;
+      background-size: contain;
+      display: inline-block;
+      margin-right: 5px;
+    }
+    .el-menu {
+      border: 0;
+      .el-menu-item,
+      .el-submenu__title {
+        height: 40px;
+        line-height: 40px;
+      }
+      .is-active {
+        background-color: #ecf5ff;
+        position: relative;
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 4px;
+          height: 100%;
+          background: #409eff;
+        }
+      }
+    }
+  }
+  .el-main {
+    padding: 0;
+  }
+}
+.bucket {
+  .bucket-select {
+    margin-bottom: 10px;
   }
   .bucket-img {
     white-space: nowrap;
