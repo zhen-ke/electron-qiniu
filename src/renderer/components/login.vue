@@ -1,6 +1,5 @@
 <template>
-  <section>
-    <header style="-webkit-app-region: drag"></header>
+  <section style="-webkit-app-region: drag" class="login">
     <div class="form">
       <form>
         <h2 class="title">登录</h2>
@@ -79,8 +78,10 @@ export default {
 </script>
 
 <style scoped>
-header {
-  height: 25px;
+.login {
+  background: #409eff;
+  width: 100%;
+  height: 100%;
 }
 .form form {
   width: 300px;

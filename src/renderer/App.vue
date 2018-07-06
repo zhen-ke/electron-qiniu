@@ -12,7 +12,9 @@
 
 <style>
   /* CSS */
-
+html,body,#app {
+  height: 100%;
+}
   html {
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
