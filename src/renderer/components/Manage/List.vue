@@ -28,7 +28,7 @@
     <el-dialog :title="title" :visible.sync="dialogFormVisible" @close="close">
       <Dialog :url="url" :postData="postData" :action="action" @onData="updateData"></Dialog>
     </el-dialog>
-    <el-dialog title="预览" :visible.sync="PreviewDialogVisible" width="70%" class="previewimg">
+    <el-dialog title="预览" :visible.sync="PreviewDialogVisible" width="75%" class="previewimg">
       <img :src="previewUrl" alt="previewimg">
       <a :href="previewUrl" download="previewUrl" ref="img"></a>
       <span slot="footer" class="dialog-footer">
@@ -293,7 +293,8 @@ export default {
   .previewimg {
     text-align: center;
     img {
-      height: 300px;
+      max-width: 600px;
+      max-height: 300px;
     }
   }
 }
