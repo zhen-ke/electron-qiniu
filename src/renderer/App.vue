@@ -5,234 +5,238 @@
 </template>
 
 <script>
-  export default {
-    name: 'qiniu'
-  }
+export default {
+  name: "qiniu"
+};
 </script>
 
 <style>
-  /* CSS */
-html,body,#app {
+/* CSS */
+html,
+body,
+#app {
   height: 100%;
 }
-  html {
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+*::-webkit-scrollbar {
+  display: none;
+}
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-  body,
-  dl,
-  dt,
-  dd,
-  ul,
-  ol,
-  li,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6,
-  pre,
-  code,
-  form,
-  fieldset,
-  legend,
-  input,
-  textarea,
-  p,
-  blockquote,
-  th,
-  td,
-  hr,
-  button,
-  article,
-  aside,
-  details,
-  figcaption,
-  figure,
-  footer,
-  header,
-  hgroup,
-  menu,
-  nav,
-  section {
-    margin: 0;
-    padding: 0;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+body,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+textarea,
+p,
+blockquote,
+th,
+td,
+hr,
+button,
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  margin: 0;
+  padding: 0;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-  article,
-  aside,
-  details,
-  figcaption,
-  figure,
-  footer,
-  header,
-  hgroup,
-  menu,
-  nav,
-  section {
-    display: block;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-  audio,
-  canvas,
-  video {
-    display: inline-block;
-    *display: inline;
-    *zoom: 1;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+audio,
+canvas,
+video {
+  display: inline-block;
+  *display: inline;
+  *zoom: 1;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-  a div,
-  a p,
-  a h1,
-  a h2,
-  a h3,
-  a h4,
-  a h5,
-  a h6 {
-    *cursor: pointer;
-  }
+a div,
+a p,
+a h1,
+a h2,
+a h3,
+a h4,
+a h5,
+a h6 {
+  *cursor: pointer;
+}
 
-  body,
-  button,
-  input,
-  select,
-  textarea {
-    font: 12px/1.5 tahoma, arial, sans-serif;
-  }
+body,
+button,
+input,
+select,
+textarea {
+  font: 12px/1.5 tahoma, arial, sans-serif;
+}
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-size: 1em;
-  }
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: 1em;
+}
 
-  a {
-    text-decoration: none;
-  }
+a {
+  text-decoration: none;
+}
 
-  @media screen and (-ms-high-contrast:active),
-  (-ms-high-contrast:none) {
-    a:active {
-      background-color: transparent;
-    }
-  }
-
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
   a:active {
-    outline: 0 none;
+    background-color: transparent;
   }
+}
 
-  small,
-  cite,
-  code,
-  em,
-  th,
-  i,
-  b {
-    font-size: 1em;
-    font-style: normal;
-    font-weight: 500;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-  }
+a:active {
+  outline: 0 none;
+}
 
-  input,
-  select,
-  textarea,
-  button {
-    font-size: 1em;
-    -webkit-box-sizing: content-box;
-    -moz-box-sizing: content-box;
-    box-sizing: border-box;
-  }
+small,
+cite,
+code,
+em,
+th,
+i,
+b {
+  font-size: 1em;
+  font-style: normal;
+  font-weight: 500;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
 
-  button,
-  input[type=button],
-  input[type=submit] {
-    cursor: pointer;
-  }
+input,
+select,
+textarea,
+button {
+  font-size: 1em;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: border-box;
+}
 
-  button[disabled],
-  input[disabled] {
-    cursor: default;
-  }
+button,
+input[type="button"],
+input[type="submit"] {
+  cursor: pointer;
+}
 
-  button::-moz-focus-inner,
-  input::-moz-focus-inner {
-    border: 0 none;
-    padding: 0;
-  }
+button[disabled],
+input[disabled] {
+  cursor: default;
+}
 
-  textarea {
-    overflow: auto;
-    vertical-align: top;
-  }
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0 none;
+  padding: 0;
+}
 
-  input[type=text]:focus,
-  input[type=password]:focus,
-  textarea:focus {
-    outline: 0 none;
-  }
+textarea {
+  overflow: auto;
+  vertical-align: top;
+}
 
-  table {
-    border-collapse: collapse;
-    border-spacing: 0;
-  }
+input[type="text"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  outline: 0 none;
+}
 
-  fieldset,
-  img,
-  iframe {
-    border: 0 none;
-  }
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
 
-  img {
-    display: inline-block;
-    vertical-align: bottom;
-    -ms-interpolation-mode: bicubic;
-  }
+fieldset,
+img,
+iframe {
+  border: 0 none;
+}
 
-  iframe {
-    display: block;
-  }
+img {
+  display: inline-block;
+  vertical-align: bottom;
+  -ms-interpolation-mode: bicubic;
+}
 
-  ul,
-  ol {
-    list-style: none;
-  }
+iframe {
+  display: block;
+}
 
-  li {
-    vertical-align: top;
-  }
+ul,
+ol {
+  list-style: none;
+}
 
-  q:before,
-  q:after {
-    content: '';
-  }
+li {
+  vertical-align: top;
+}
 
-  html,
-  body {
-    min-height: 100%;
-    background: #fff;
+q:before,
+q:after {
+  content: "";
+}
 
-  }
+html,
+body {
+  min-height: 100%;
+  background: #fff;
+}
 
-  body {
-    font-family: 'PingFangSc Regular', 'Microsoft Yahei', "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.42857143;
-    color: #333;
-  }
+body {
+  font-family: "PingFangSc Regular", "Microsoft Yahei", "Helvetica Neue",
+    Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+}
 </style>
