@@ -110,7 +110,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.deleteBucket(data)
+          this.deleteBucket(data);
         })
         .catch(() => {
           this.$message({
@@ -134,6 +134,8 @@ export default {
         .then(it => {
           if (it.data.length) {
             this.options = it.data;
+            this.value = it.data[0]
+            this.getBucketList(this.value);
           }
         })
         .catch(e => {
@@ -180,31 +182,36 @@ export default {
       localStorage.removeItem("obj");
       this.$electron.ipcRenderer.send("status", false);
     },
-    getBuckets(msg) {
-      let list = msg || JSON.parse(localStorage.obj || "[]");
-      if (list.buckets) {
-        this.options = list.buckets;
-        // list.buckets.forEach((it, index) => {
-        //   let obj = {};
-        //   obj["label"] = it;
-        //   obj["value"] = it;
-        //   this.options.push(obj);
-        // });
-      } else {
-        console.log("没有新建空间");
-      }
-    },
-    getBucketList(url, val) {
+    // getBuckets(msg) {
+    //   let list = msg || JSON.parse(localStorage.obj || "[]");
+    //   if (list.buckets) {
+    //     this.options = list.buckets;
+    //     // list.buckets.forEach((it, index) => {
+    //     //   let obj = {};
+    //     //   obj["label"] = it;
+    //     //   obj["value"] = it;
+    //     //   this.options.push(obj);
+    //     // });
+    //   } else {
+    //     console.log("没有新建空间");
+    //   }
+    // },
+    getBucketList(val) {
+      console.log(val)
+      let token = qiniu.util.generateAccessToken(
+        this.mac,
+        "http://api.qiniu.com/v6/domain/list" + "?tbl=" + val
+      );
       let config = {
         params: {
           tbl: val
         },
         headers: {
-          Authorization: this.AccessToken
+          Authorization: token
         }
       };
       this.myAxios
-        .get(url, config)
+        .get("http://api.qiniu.com/v6/domain/list", config)
         .then(it => {
           if (it.data.length) {
             this.url = it.data[0];
@@ -235,13 +242,13 @@ export default {
       var putPolicy = new qiniu.rs.PutPolicy(options);
       return putPolicy.uploadToken(this.mac);
     },
-    getAccessToken(val) {
-      // 获取认证Token
-      return qiniu.util.generateAccessToken(
-        this.mac,
-        "http://api.qiniu.com/v6/domain/list" + "?tbl=" + val
-      );
-    },
+    // getAccessToken(val) {
+    //   // 获取认证Token
+    //   return qiniu.util.generateAccessToken(
+    //     this.mac,
+    //     "http://api.qiniu.com/v6/domain/list" + "?tbl=" + val
+    //   );
+    // },
     copyText(img) {
       clipboard.writeText(img);
     }
@@ -252,24 +259,26 @@ export default {
       // this.getBuckets(login);
       this.mac = login.mac;
       this.getBucket();
-      let value = login.buckets[0];
-      this.value = value;
+      // this.value = this.options[0];
+      // let value = login.buckets[0];
+      // this.value = value;
     } else {
       this.$electron.ipcRenderer.on("msg", (event, files) => {
         // this.getBuckets(files);
         this.mac = files.mac;
         this.getBucket();
-        let value = files.buckets[0];
-        this.value = value;
+        // this.value = this.options[0];
+        // let value = files.buckets[0];
+        // this.value = value;
       });
     }
   },
   watch: {
     value(val, oldVal) {
       this.postData.token = this.getUploadToken(val);
-      this.AccessToken = this.getAccessToken(val);
+      // this.AccessToken = this.getAccessToken(val);
       this.getZoneInfo(val);
-      this.getBucketList("http://api.qiniu.com/v6/domain/list", val);
+      this.getBucketList(val);
     }
   },
   components: {
@@ -304,7 +313,7 @@ export default {
       position: absolute;
       bottom: 20px;
       right: 20px;
-      width: 20px;
+      width: 15px;
       img {
         width: 100%;
         height: auto;
@@ -314,6 +323,8 @@ export default {
       position: absolute;
       left: 200px;
       bottom: 20px;
+      font-size: 12px;
+      line-height: 22px;
     }
   }
   .el-aside {

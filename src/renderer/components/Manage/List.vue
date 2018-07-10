@@ -1,16 +1,10 @@
 <template>
   <div class="privileges-table">
     <el-table :data="filterTableData" style="width: 100%" v-loading="loading" max-height="590" size="small">
-      <el-table-column prop="key" label="文件名" sortable width="100">
+      <el-table-column prop="key" label="文件名" sortable>
       </el-table-column>
-      <el-table-column prop="type" label="文件类型" sortable>
-      </el-table-column>
-      <!-- <el-table-column prop="mimeType" label="存储类型" width="150" sortable>
-      </el-table-column> -->
       <el-table-column prop="fsize" label="文件大小" sortable>
       </el-table-column>
-      <!-- <el-table-column prop="putTime" label="最后更新" width="180" sortable>
-      </el-table-column> -->
       <el-table-column label="存储类型">
         <template slot-scope="scope">
           <i class="el-icon-document"></i>
@@ -36,7 +30,7 @@
     </el-dialog>
     <el-dialog title="预览" :visible.sync="PreviewDialogVisible" width="70%" class="previewimg">
       <img :src="previewUrl" alt="previewimg">
-      <a :href="previewUrl" download="previewUrl" ref="img"></a>  
+      <a :href="previewUrl" download="previewUrl" ref="img"></a>
       <span slot="footer" class="dialog-footer">
         <el-button size="mini" @click="copy">复制</el-button>
         <el-button size="mini" type="primary" @click="download">下载</el-button>
@@ -163,8 +157,8 @@ export default {
       }
     },
     download() {
-      this.$refs.img.click()
-      this.PreviewDialogVisible = false
+      this.$refs.img.click();
+      this.PreviewDialogVisible = false;
     },
     handleEdit(index, row) {
       let copyurl = "http://" + this.url + "/" + row.key;
@@ -299,7 +293,7 @@ export default {
   .previewimg {
     text-align: center;
     img {
-     height: 300px;
+      height: 300px;
     }
   }
 }
