@@ -14,47 +14,47 @@
 ### 项目目录
 
 ```
-    src
-│   ├── index.ejs
-│   ├── main
-│   │   ├── index.dev.js
-│   │   └── index.js
-│   └── rendererd
-│       ├── App.vue
-│       ├── assets
-│       │   └── logo.png
-│       ├── components
-│       │   ├── AddImage.vue
-│       │   ├── Bucket.vue
-│       │   ├── LandingPage
-│       │   │   └── SystemInformation.vue
-│       │   ├── LandingPage.vue
-│       │   ├── Manage
-│       │   │   ├── Dialog.vue
-│       │   │   ├── List.vue
-│       │   │   ├── Pagination.vue
-│       │   │   └── Search.vue
-│       │   ├── Upload.vue
-│       │   └── login.vue
-│       ├── config
-│       │   └── http.js
-│       ├── main.js
-│       ├── router
-│       │   └── index.js
-│       ├── service
-│       │   ├── api.js
-│       │   └── getData.js
-│       └── store
-│           ├── index.js
-│           └── modules
-│               ├── Counter.js
-│               └── index.js
-└── static
-    └── image
-        ├── data.png
-        ├── logo.png
-        ├── quit.svg
-        └── upload.png
+src
+├── index.ejs
+├── main
+│   ├── index.dev.js
+│   └── index.js
+└── rendererd
+│   ├── App.vue
+│   ├── assets
+│   │   └── logo.png
+│   ├── components
+│   │   ├── AddImage.vue
+│   │   ├── Bucket.vue
+│   │   ├── LandingPage
+│   │   │   └── SystemInformation.vue
+│   │   ├── LandingPage.vue
+│   │   ├── Manage
+│   │   │   ├── Dialog.vue
+│   │   │   ├── List.vue
+│   │   │   ├── Pagination.vue
+│   │   │   └── Search.vue
+│   │   ├── Upload.vue
+│   │   └── login.vue
+│   ├── config
+│   │   └── http.js
+│   ├── main.js
+│   ├── router
+│   │   └── index.js
+│   ├── service
+│   │   ├── api.js
+│   │   └── getData.js
+│   └── store
+│        ├── index.js
+│        └── modules
+│            ├── Counter.js
+│            └── index.js
+static
+└── image
+    ├── data.png
+    ├── logo.png
+    ├── quit.svg
+    └── upload.png
 ```
 
 ### 构建应用
