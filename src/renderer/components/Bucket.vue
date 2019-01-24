@@ -3,57 +3,127 @@
     <el-container>
       <el-header style="-webkit-app-region: drag">
         <h1 class="logo">
-          <img src="../../../static/image/logo.png" alt="logo">
+          <img
+            src="../../../static/image/logo.png"
+            alt="logo"
+          >
         </h1>
-        <div class="quit" @click="quit">
-          <img src="../../../static/image/quit.svg" alt="quit">
+        <div
+          class="quit"
+          @click="quit"
+        >
+          <img
+            src="../../../static/image/quit.svg"
+            alt="quit"
+          >
         </div>
         <AddImage class="addimg"></AddImage>
       </el-header>
       <el-container>
         <el-aside width="200px">
           <h4 class="title">存储空间列表
-            <i class="el-icon-plus add" @click="addDialogVisible = true"></i>
+            <i
+              class="el-icon-plus add"
+              @click="addDialogVisible = true"
+            ></i>
           </h4>
-          <el-menu default-active="0" class="el-menu-vertical-demo">
-            <el-menu-item :index="''+index" v-for="(item,index) in options" :key="index" @click="value = item">
+          <el-menu
+            default-active="0"
+            class="el-menu-vertical-demo"
+          >
+            <el-menu-item
+              :index="''+index"
+              v-for="(item,index) in options"
+              :key="index"
+              @click="value = item"
+            >
               <i class="icon"></i>
               <span slot="title">{{item}}</span>
-              <i class="el-icon-delete delete" @click.stop.prevent="beforeDelete(item)"></i>
+              <i
+                class="el-icon-delete delete"
+                @click.stop.prevent="beforeDelete(item)"
+              ></i>
             </el-menu-item>
           </el-menu>
         </el-aside>
         <el-main>
-          <div class="bucket" v-if="options.length" style="-webkit-app-region: no-drag">
-            <List :bucket="value" :mac="mac" :url="url" :postData="postData" :action="action"></List>
+          <div
+            class="bucket"
+            v-if="options.length"
+            style="-webkit-app-region: no-drag"
+          >
+            <List
+              :bucket="value"
+              :mac="mac"
+              :url="url"
+              :postData="postData"
+              :action="action"
+            ></List>
           </div>
         </el-main>
       </el-container>
     </el-container>
-    <el-dialog title="提示" :visible.sync="addDialogVisible" width="40%">
-      <el-form ref="form" :model="form" label-width="100px">
+    <el-dialog
+      title="提示"
+      :visible.sync="addDialogVisible"
+      width="40%"
+    >
+      <el-form
+        ref="form"
+        :model="form"
+        label-width="100px"
+      >
         <el-form-item label="存储空间名称">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="存储区域">
-          <el-select v-model="form.region" placeholder="请选择存储区域">
-            <el-option label="华东" value="z0"></el-option>
-            <el-option label="华北" value="z1"></el-option>
-            <el-option label="华南" value="z2"></el-option>
-            <el-option label="北美" value="na0"></el-option>
-            <el-option label="东南亚" value="as0"></el-option>
+          <el-select
+            v-model="form.region"
+            placeholder="请选择存储区域"
+          >
+            <el-option
+              label="华东"
+              value="z0"
+            ></el-option>
+            <el-option
+              label="华北"
+              value="z1"
+            ></el-option>
+            <el-option
+              label="华南"
+              value="z2"
+            ></el-option>
+            <el-option
+              label="北美"
+              value="na0"
+            ></el-option>
+            <el-option
+              label="东南亚"
+              value="as0"
+            ></el-option>
           </el-select>
         </el-form-item>
       </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="addDialogVisible = false">取 消</el-button>
-        <el-button size="mini" type="primary" @click="addBucket">确 定</el-button>
+      <span
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          size="mini"
+          @click="addDialogVisible = false"
+        >取 消</el-button>
+        <el-button
+          size="mini"
+          type="primary"
+          @click="addBucket"
+        >确 定</el-button>
       </span>
     </el-dialog>
   </section>
 </template>
 
 <script>
+import { storageList, dropStorage ,addBucket} from "./../service/getData.js";
 import qiniu from "qiniu";
 import { clipboard } from "electron";
 import List from "@/components/Manage/List";
@@ -82,17 +152,7 @@ export default {
   },
   methods: {
     deleteBucket(data) {
-      this.AccessToken = qiniu.util.generateAccessToken(
-        this.mac,
-        "http://rs.qbox.me/drop/" + data
-      );
-      let config = {
-        headers: {
-          Authorization: this.AccessToken
-        }
-      };
-      this.myAxios
-        .post("http://rs.qbox.me/drop/" + data, null, config)
+      dropStorage(this.mac, data)
         .then(it => {
           if (it.status === 200) {
             this.$message.success("删除成功");
@@ -120,21 +180,11 @@ export default {
         });
     },
     getBucket() {
-      this.AccessToken = qiniu.util.generateAccessToken(
-        this.mac,
-        "http://rs.qbox.me/buckets"
-      );
-      let config = {
-        headers: {
-          Authorization: this.AccessToken
-        }
-      };
-      this.myAxios
-        .get("http://rs.qbox.me/buckets", config)
+      storageList(this.mac)
         .then(it => {
           if (it.data.length) {
             this.options = it.data;
-            this.value = it.data[0]
+            this.value = it.data[0];
             this.getBucketList(this.value);
           }
         })
@@ -144,28 +194,7 @@ export default {
     },
     addBucket() {
       this.addDialogVisible = false;
-      let EncodedBucketName = qiniu.util.urlsafeBase64Encode(this.form.name);
-      let Region = this.form.region;
-      let addBucketAccessToken = qiniu.util.generateAccessToken(
-        this.mac,
-        "http://rs.qiniu.com/mkbucketv2/" +
-          EncodedBucketName +
-          "/region/" +
-          Region
-      );
-      this.myAxios
-        .post(
-          "http://rs.qiniu.com/mkbucketv2/" +
-            EncodedBucketName +
-            "/region/" +
-            Region,
-          null,
-          {
-            headers: {
-              Authorization: addBucketAccessToken
-            }
-          }
-        )
+        addBucket(this.mac, this.form.name, this.form.region)
         .then(it => {
           if (it.status === 200) {
             this.form.name = "";
@@ -197,7 +226,7 @@ export default {
     //   }
     // },
     getBucketList(val) {
-      console.log(val)
+      console.log(val);
       let token = qiniu.util.generateAccessToken(
         this.mac,
         "http://api.qiniu.com/v6/domain/list" + "?tbl=" + val

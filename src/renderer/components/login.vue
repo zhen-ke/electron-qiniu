@@ -1,24 +1,44 @@
 <template>
-  <section style="-webkit-app-region: drag" class="login">
+  <section
+    style="-webkit-app-region: drag"
+    class="login"
+  >
     <div class="form">
       <form>
         <h2 class="title">登录</h2>
         <div class="form-group">
           <!-- <label for="AccessKey">AccessKey</label> -->
-          <input type="password" class="form-control" id="AccessKey" v-model="mac.accessKey" placeholder="AccessKey">
+          <input
+            type="password"
+            class="form-control"
+            id="AccessKey"
+            v-model="mac.accessKey"
+            placeholder="AccessKey"
+          >
         </div>
         <div class="form-group">
           <!-- <label for="SecretKey">SecretKey</label> -->
-          <input type="password" class="form-control" id="SecretKey" v-model="mac.secretKey" placeholder="SecretKey">
+          <input
+            type="password"
+            class="form-control"
+            id="SecretKey"
+            v-model="mac.secretKey"
+            placeholder="SecretKey"
+          >
         </div>
-        <el-button type="primary" @click.prevent="getBucket" size="small" class="btn">确定</el-button>
+        <el-button
+          type="primary"
+          @click.prevent="getBucket"
+          size="small"
+          class="btn"
+        >确定</el-button>
       </form>
     </div>
   </section>
 </template>
 
 <script>
-import qiniu from "qiniu";
+import { storageList } from "./../service/getData.js";
 
 export default {
   data() {
@@ -27,7 +47,6 @@ export default {
         accessKey: "",
         secretKey: ""
       },
-      AccessToken: ""
     };
   },
   methods: {
@@ -35,17 +54,7 @@ export default {
       if (this.mac.accessKey === "" || this.mac.secretKey === "") {
         this.$message.error("accessKey/secretKey不能为空");
       } else {
-        this.AccessToken = qiniu.util.generateAccessToken(
-          this.mac,
-          "http://rs.qbox.me/buckets"
-        );
-        let config = {
-          headers: {
-            Authorization: this.AccessToken
-          }
-        };
-        this.myAxios
-          .get("http://rs.qbox.me/buckets", config)
+        storageList(this.mac)
           .then(it => {
             if (it.data.length) {
               let data = {
@@ -101,7 +110,7 @@ export default {
   font-size: 18px;
   line-height: 26px;
   margin-bottom: 15px;
-  color: #409EFF;
+  color: #409eff;
 }
 
 .form-group {
@@ -125,7 +134,7 @@ label {
   color: #555;
   background-color: #fff;
   background-image: none;
-  border: 1px solid #D7DAE2;
+  border: 1px solid #d7dae2;
   border-radius: 4px;
   -webkit-transition: border-color ease-in-out 0.15s,
     -webkit-box-shadow ease-in-out 0.15s;
@@ -136,16 +145,20 @@ label {
 .btn {
   width: 100%;
 }
-::-webkit-input-placeholder { /* WebKit browsers */
-    color:    #D7DAE2;
+::-webkit-input-placeholder {
+  /* WebKit browsers */
+  color: #d7dae2;
 }
-:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color:    #D7DAE2;
+:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #d7dae2;
 }
-::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color:    #D7DAE2;
+::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #d7dae2;
 }
-:-ms-input-placeholder { /* Internet Explorer 10+ */
-    color:    #D7DAE2;
+:-ms-input-placeholder {
+  /* Internet Explorer 10+ */
+  color: #d7dae2;
 }
 </style>

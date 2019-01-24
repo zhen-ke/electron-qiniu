@@ -6,7 +6,7 @@
 
 ### 项目截图
 
-　![screenshot1](./screenshot/screenshot-01.png)
+![screenshot1](./screenshot/screenshot-01.png)
 ![screenshot2](./screenshot/screenshot-02.png)
 ![screenshot3](./screenshot/screenshot-03.png)
 ![screenshot4](./screenshot/screenshot-04.png)

@@ -30,8 +30,8 @@ function createWindow() {
     height: 500,
     useContentSize: true,
     width: 350,
-    titleBarStyle: 'hidden',
-    resizable: false,
+    // titleBarStyle: 'hidden',
+    // resizable: false,
     webPreferences: {
       webSecurity: false
     }
@@ -75,8 +75,8 @@ function createBucket() {
     useContentSize: true,
     width: 980,
     show: false,
-    titleBarStyle: 'hidden',
-    resizable: false,
+    // titleBarStyle: 'hidden',
+    // resizable: false,
     webPreferences: {
       webSecurity: false
     }
