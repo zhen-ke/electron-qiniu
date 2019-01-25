@@ -37,7 +37,7 @@ export const deleteBucket = (mac, data) =>
 
 // 删除资源
 export const deleteResource = (mac, data) => {
-  let url = deleteResourceUrl + data;
+  let url = deleteResourceUrl + qiniu.util.urlsafeBase64Encode(data);
   return http.post(url, null, {
     headers: {
       Authorization: qiniu.util.generateAccessToken(mac, url)

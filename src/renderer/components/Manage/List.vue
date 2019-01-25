@@ -223,8 +223,7 @@ export default {
         .then(() => {
           this.$delete(this.tableData, index, this.tableData[index]);
           let entry = `${this.bucket}:${row.key}`;
-          let encodedEntryURI = qiniu.util.urlsafeBase64Encode(entry);
-          this.delete(encodedEntryURI);
+          this.delete(entry);
         })
         .catch(() => {
           this.$message({
