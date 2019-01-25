@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { storageList } from "./../service/getData.js";
+import { storageList } from "@/service/getData.js";
 
 export default {
   data() {

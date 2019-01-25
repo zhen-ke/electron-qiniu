@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { storageList, dropStorage ,addBucket} from "./../service/getData.js";
+import { storageList, dropStorage, addBucket } from "@/service/getData.js";
 import qiniu from "qiniu";
 import { clipboard } from "electron";
 import List from "@/components/Manage/List";
@@ -194,7 +194,7 @@ export default {
     },
     addBucket() {
       this.addDialogVisible = false;
-        addBucket(this.mac, this.form.name, this.form.region)
+      addBucket(this.mac, this.form.name, this.form.region)
         .then(it => {
           if (it.status === 200) {
             this.form.name = "";
