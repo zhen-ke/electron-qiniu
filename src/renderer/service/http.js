@@ -1,36 +1,28 @@
-import http from 'axios';
+import http from "axios";
 import qs from "qs";
 
 // http 配置
 http.defaults.timeout = 10000;
-http.defaults.baseURL = 'http://rs.qbox.me/'
+http.defaults.baseURL = "http://rs.qbox.me/";
 
 // http request 拦截器
-http.interceptors.request.use(config => {
-  let user = localStorage.user
-  if (config.method === 'post') {
-    config.data = qs.stringify(config.data)
-    if (user) {
-      config.data = config.data + `&accesstoken=${JSON.parse(user).accesstoken}`
-    }
-  }
-  if (config.method === 'get') {
-    if (user) {
-      config.params = Object.assign(config.params, { accesstoken: JSON.parse(user).accesstoken })
-    }
-  }
-  return config
-},
+http.interceptors.request.use(
+  config => {
+    return config;
+  },
   err => {
     return Promise.reject(err);
-  });
+  }
+);
 
 // http response 拦截器
-http.interceptors.response.use(response => {
+http.interceptors.response.use(
+  response => {
     return response;
   },
   error => {
-    return Promise.reject(error)
-  });
+    return Promise.reject(error);
+  }
+);
 
 export default http;
