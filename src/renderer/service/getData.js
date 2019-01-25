@@ -1,18 +1,25 @@
 import http from "./http";
-import { bucketsUrl, dropUrl, addUrl, deleteUrl, listUrl } from "./api";
+import {
+  getBucketListUrl,
+  deleteBucketUrl,
+  createBucketUrl,
+  deleteResourceUrl,
+  getListUrl,
+  getBucketDomainUrl
+} from "./api";
 import qiniu from "qiniu";
 
 // 获取 Bucket 列表
-export const storageList = data =>
-  http.get(bucketsUrl, {
+export const getBucketList = data =>
+  http.get(getBucketListUrl, {
     headers: {
-      Authorization: qiniu.util.generateAccessToken(data, bucketsUrl)
+      Authorization: qiniu.util.generateAccessToken(data, getBucketListUrl)
     }
   });
 
 // 创建 Bucket
-export const addBucket = (mac, name, region) => {
-  let url = addUrl + qiniu.util.urlsafeBase64Encode(name) + "/region/" + region;
+export const createBucket = (mac, name, region) => {
+  let url = createBucketUrl + qiniu.util.urlsafeBase64Encode(name) + "/region/" + region;
   return http.post(url, null, {
     headers: {
       Authorization: qiniu.util.generateAccessToken(mac, url)
@@ -21,16 +28,16 @@ export const addBucket = (mac, name, region) => {
 };
 
 // 删除 Bucket
-export const dropStorage = (mac, data) =>
-  http.post(dropUrl + data, null, {
+export const deleteBucket = (mac, data) =>
+  http.post(deleteBucketUrl + data, null, {
     headers: {
-      Authorization: qiniu.util.generateAccessToken(mac, dropUrl + data)
+      Authorization: qiniu.util.generateAccessToken(mac, deleteBucketUrl + data)
     }
   });
 
 // 删除资源
-export const deleteImg = (mac, data) => {
-  let url = deleteUrl + data;
+export const deleteResource = (mac, data) => {
+  let url = deleteResourceUrl + data;
   return http.post(url, null, {
     headers: {
       Authorization: qiniu.util.generateAccessToken(mac, url)
@@ -40,14 +47,28 @@ export const deleteImg = (mac, data) => {
 
 // 资源列举
 export const getList = (mac, data) =>
-  http.get(listUrl, {
+  http.get(getListUrl, {
     params: {
       bucket: data
     },
     headers: {
       Authorization: qiniu.util.generateAccessToken(
         mac,
-        listUrl + "?bucket=" + data
+        getListUrl + "?bucket=" + data
+      )
+    }
+  });
+
+// 获取 Bucket 空间域名
+export const getBucketDomain = (mac, data) =>
+  http.get(getBucketDomainUrl, {
+    params: {
+      tbl: data
+    },
+    headers: {
+      Authorization: qiniu.util.generateAccessToken(
+        mac,
+        getBucketDomainUrl + "?tbl=" + data
       )
     }
   });

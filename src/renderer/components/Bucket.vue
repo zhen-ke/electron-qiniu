@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { storageList, dropStorage, addBucket } from "@/service/getData.js";
+import { getBucketList, deleteBucket, createBucket ,getBucketDomain} from "@/service/getData.js";
 import qiniu from "qiniu";
 import { clipboard } from "electron";
 import List from "@/components/Manage/List";
@@ -152,7 +152,7 @@ export default {
   },
   methods: {
     deleteBucket(data) {
-      dropStorage(this.mac, data)
+      deleteBucket(this.mac, data)
         .then(it => {
           if (it.status === 200) {
             this.$message.success("删除成功");
@@ -180,12 +180,12 @@ export default {
         });
     },
     getBucket() {
-      storageList(this.mac)
+      getBucketList(this.mac)
         .then(it => {
           if (it.data.length) {
             this.options = it.data;
             this.value = it.data[0];
-            this.getBucketList(this.value);
+            this.getBucketList(this.mac,this.value);
           }
         })
         .catch(e => {
@@ -194,7 +194,7 @@ export default {
     },
     addBucket() {
       this.addDialogVisible = false;
-      addBucket(this.mac, this.form.name, this.form.region)
+      createBucket(this.mac, this.form.name, this.form.region)
         .then(it => {
           if (it.status === 200) {
             this.form.name = "";
@@ -225,23 +225,11 @@ export default {
     //     console.log("没有新建空间");
     //   }
     // },
-    getBucketList(val) {
-      console.log(val);
-      let token = qiniu.util.generateAccessToken(
-        this.mac,
-        "http://api.qiniu.com/v6/domain/list" + "?tbl=" + val
-      );
-      let config = {
-        params: {
-          tbl: val
-        },
-        headers: {
-          Authorization: token
-        }
-      };
-      this.myAxios
-        .get("http://api.qiniu.com/v6/domain/list", config)
+    getBucketList(mac,data) {
+      console.log(data);
+      getBucketDomain(mac,data)
         .then(it => {
+          console.log(it)
           if (it.data.length) {
             this.url = it.data[0];
             console.log(this.url);
@@ -307,7 +295,7 @@ export default {
       this.postData.token = this.getUploadToken(val);
       // this.AccessToken = this.getAccessToken(val);
       this.getZoneInfo(val);
-      this.getBucketList(val);
+      this.getBucketList(this.mac,val);
     }
   },
   components: {

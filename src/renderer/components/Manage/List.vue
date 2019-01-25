@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import { deleteImg , getList } from "@/service/getData.js";
+import { deleteResource , getList } from "@/service/getData.js";
 import qiniu from "qiniu";
 import { clipboard } from "electron";
 import Dialog from "@/components/Manage/Dialog";
@@ -156,7 +156,7 @@ export default {
       });
     },
     delete(data) {
-      deleteImg(this.mac, data)
+      deleteResource(this.mac, data)
         .then(it => {
           this.$message.success("删除成功");
         })

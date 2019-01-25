@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { storageList } from "@/service/getData.js";
+import { getBucketList } from "@/service/getData.js";
 
 export default {
   data() {
@@ -54,7 +54,7 @@ export default {
       if (this.mac.accessKey === "" || this.mac.secretKey === "") {
         this.$message.error("accessKey/secretKey不能为空");
       } else {
-        storageList(this.mac)
+        getBucketList(this.mac)
           .then(it => {
             if (it.data.length) {
               let data = {
