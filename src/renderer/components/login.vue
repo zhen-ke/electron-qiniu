@@ -18,7 +18,7 @@
         >
           <el-input
             v-model="mac.accessKey"
-            placeholder="请输入 AccessKey"
+            placeholder="请输入accessKey"
             type="password"
           ></el-input>
         </el-form-item>
@@ -28,7 +28,7 @@
         >
           <el-input
             v-model="mac.secretKey"
-            placeholder="请输入 SecretKey"
+            placeholder="请输入secretKey"
             type="password"
           ></el-input>
         </el-form-item>
@@ -38,13 +38,7 @@
             type="primary"
             @click="submitForm('mac')"
             :disabled="submitState"
-          >提交</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            @click="resetForm('mac')"
-            class="btn"
-          >重置</el-button>
+          >立即登录</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -130,7 +124,7 @@ export default {
   transform: translate(-50%, -50%);
   box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  padding: 30px;
+  padding: 25px;
 }
 
 .login-form .title {
