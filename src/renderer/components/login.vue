@@ -3,36 +3,50 @@
     style="-webkit-app-region: drag"
     class="login"
   >
-    <div class="form">
-      <form>
-        <h2 class="title">登录</h2>
-        <div class="form-group">
-          <!-- <label for="AccessKey">AccessKey</label> -->
-          <input
-            type="password"
-            class="form-control"
-            id="AccessKey"
+    <div class="login-form">
+      <h2 class="title"><img
+          src="../assets/logo-white.png"
+          alt="logo"
+        ></h2>
+      <el-form
+        :model="mac"
+        ref="mac"
+      >
+        <el-form-item
+          prop="accessKey"
+          :rules="{ required: true, message: 'accessKey 为空或者错误', trigger: 'blur' }"
+        >
+          <el-input
             v-model="mac.accessKey"
-            placeholder="AccessKey"
-          >
-        </div>
-        <div class="form-group">
-          <!-- <label for="SecretKey">SecretKey</label> -->
-          <input
+            placeholder="请输入 AccessKey"
             type="password"
-            class="form-control"
-            id="SecretKey"
+          ></el-input>
+        </el-form-item>
+        <el-form-item
+          prop="secretKey"
+          :rules="{ required: true, message: 'secretKey 为空或者错误', trigger: 'blur' }"
+        >
+          <el-input
             v-model="mac.secretKey"
-            placeholder="SecretKey"
-          >
-        </div>
-        <el-button
-          type="primary"
-          @click.prevent="getBucket"
-          size="small"
-          class="btn"
-        >确定</el-button>
-      </form>
+            placeholder="请输入 SecretKey"
+            type="password"
+          ></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            class="btn"
+            type="primary"
+            @click="submitForm('mac')"
+            :disabled="submitState"
+          >提交</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            @click="resetForm('mac')"
+            class="btn"
+          >重置</el-button>
+        </el-form-item>
+      </el-form>
     </div>
   </section>
 </template>
@@ -47,31 +61,45 @@ export default {
         accessKey: "",
         secretKey: ""
       },
+      submitState: false
     };
   },
   methods: {
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.getBucket();
+        } else {
+          return false;
+        }
+      });
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
     getBucket() {
-      if (this.mac.accessKey === "" || this.mac.secretKey === "") {
-        this.$message.error("accessKey/secretKey不能为空");
-      } else {
-        getBucketList(this.mac)
-          .then(it => {
-            if (it.data.length) {
-              let data = {
-                buckets: it.data,
-                mac: {
-                  accessKey: this.mac.accessKey,
-                  secretKey: this.mac.secretKey
-                }
-              };
-              this.$electron.ipcRenderer.send("bucketsList", data);
-              localStorage.obj = JSON.stringify(data);
-            }
-          })
-          .catch(e => {
-            this.$message.error("accessKey 或者 secretKey 错误");
-          });
-      }
+      this.submitState = true
+      getBucketList(this.mac)
+        .then(it => {
+          this.submitState = false;
+          if (it.data.length) {
+            let data = {
+              buckets: it.data,
+              mac: {
+                accessKey: this.mac.accessKey,
+                secretKey: this.mac.secretKey
+              }
+            };
+            this.$electron.ipcRenderer.send("bucketsList", data);
+            localStorage.obj = JSON.stringify(data);
+          }
+        })
+        .catch(e => {
+          this.submitState = false;
+          // 异步验证表单
+          this.resetForm('mac')
+          this.submitForm('mac')
+        });
     },
     checkLogin() {
       let login = JSON.parse(localStorage.obj || "null");
@@ -88,12 +116,12 @@ export default {
 
 <style scoped>
 .login {
-  background: #409eff;
+  background: #1989fa;
   width: 100%;
   height: 100%;
 }
-.form form {
-  width: 300px;
+.login-form {
+  width: 260px;
   margin: 0 auto;
   background: #fff;
   top: 50%;
@@ -105,26 +133,19 @@ export default {
   padding: 30px;
 }
 
-.form form .title {
+.login-form .title {
   text-align: center;
   font-size: 18px;
   line-height: 26px;
+  margin-bottom: 35px;
+}
+.login-form .title img {
+  width: 80px;
+}
+.login-form .form-group {
   margin-bottom: 15px;
-  color: #409eff;
 }
-
-.form-group {
-  margin-bottom: 15px;
-}
-
-label {
-  display: inline-block;
-  max-width: 100%;
-  margin-bottom: 5px;
-  font-weight: 700;
-}
-
-.form-control {
+.login-form .form-control {
   display: block;
   width: 100%;
   height: 34px;
@@ -134,7 +155,7 @@ label {
   color: #555;
   background-color: #fff;
   background-image: none;
-  border: 1px solid #d7dae2;
+  border: 2px solid #e1e6f0;
   border-radius: 4px;
   -webkit-transition: border-color ease-in-out 0.15s,
     -webkit-box-shadow ease-in-out 0.15s;
@@ -142,23 +163,24 @@ label {
   transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
 }
 
-.btn {
+.login-form .btn {
   width: 100%;
+  /* background: #1989fa; */
 }
 ::-webkit-input-placeholder {
   /* WebKit browsers */
-  color: #d7dae2;
+  color: #e1e6f0;
 }
 :-moz-placeholder {
   /* Mozilla Firefox 4 to 18 */
-  color: #d7dae2;
+  color: #e1e6f0;
 }
 ::-moz-placeholder {
   /* Mozilla Firefox 19+ */
-  color: #d7dae2;
+  color: #e1e6f0;
 }
 :-ms-input-placeholder {
   /* Internet Explorer 10+ */
-  color: #d7dae2;
+  color: #e1e6f0;
 }
 </style>
