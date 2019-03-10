@@ -85,7 +85,7 @@ export default {
               }
             };
             this.$electron.ipcRenderer.send("bucketsList", data);
-            localStorage.obj = JSON.stringify(data);
+            localStorage.mac = JSON.stringify(this.mac);
           }
         })
         .catch(e => {
