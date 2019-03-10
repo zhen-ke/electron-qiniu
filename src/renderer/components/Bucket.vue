@@ -17,7 +17,12 @@
             alt="quit"
           >
         </div>
-        <UploadImage class="addimg"></UploadImage>
+        <UploadImage
+          class="addimg"
+          :url="url"
+          :postData="postData"
+          :action="action"
+        ></UploadImage>
       </el-header>
       <el-container>
         <el-aside width="200px">
@@ -28,9 +33,6 @@
           <List
             :bucket="currentBucket"
             :mac="mac"
-            :url="url"
-            :postData="postData"
-            :action="action"
             v-if="bucketList.length"
           />
         </el-main>
@@ -48,8 +50,7 @@ import {
   getBucketDomain
 } from "@/service/getData.js";
 import { clipboard } from "electron";
-import List from "@/components/Manage/List";
-import Upload from "@/components/Upload";
+import List from "@/components/List";
 import UploadImage from "@/components/UploadImage";
 import CreateBucket from "@/components/CreateBucket";
 import BucketList from "@/components/BucketList";
@@ -73,19 +74,6 @@ export default {
     };
   },
   methods: {
-    // getBucket() {
-    //   getBucketList(this.mac)
-    //     .then(it => {
-    //       if (it.data.length) {
-    //         this.options = it.data;
-    //         this.currentBucket = it.data[0];
-    //         this.getBucketDomain(this.mac, this.currentBucket);
-    //       }
-    //     })
-    //     .catch(e => {
-    //       this.$message.error("accessKey 或者 secretKey 错误");
-    //     });
-    // },
     updateSwitchBucketList(currentBucket) {
       this.currentBucket = currentBucket;
     },
@@ -135,7 +123,7 @@ export default {
     ...mapState(["bucketList", "mac"])
   },
   mounted() {
-    console.log(qiniu)
+    console.log(qiniu);
     const mac = JSON.parse(localStorage.mac || "null");
     if (mac) {
       this.$store.commit({
@@ -160,7 +148,6 @@ export default {
   },
   components: {
     List,
-    Upload,
     UploadImage,
     CreateBucket,
     BucketList

@@ -26,6 +26,7 @@ const store = new Vuex.Store({
       getBucketList(state.mac).then(it => {
         if (it.data.length) {
           commit("GET_BUCKET_LIST", it.data);
+          // this.getBucketDomain(this.mac, this.currentBucket);
         }
       });
     }
