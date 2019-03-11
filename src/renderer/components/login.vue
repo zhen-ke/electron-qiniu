@@ -5,7 +5,7 @@
   >
     <div class="login-form">
       <h2 class="title"><img
-          src="../assets/logo-white.png"
+          :src="logo"
           alt="logo"
         ></h2>
       <el-form
@@ -47,6 +47,7 @@
 
 <script>
 import { getBucketList } from "@/service/getData.js";
+import { logo } from "@/assets/image.js";
 
 export default {
   data() {
@@ -55,8 +56,12 @@ export default {
         accessKey: "",
         secretKey: ""
       },
-      submitState: false
+      submitState: false,
+      logo: ""
     };
+  },
+  mounted() {
+    this.logo = logo;
   },
   methods: {
     submitForm(formName) {
@@ -72,7 +77,7 @@ export default {
       this.$refs[formName].resetFields();
     },
     getBucket() {
-      this.submitState = true
+      this.submitState = true;
       getBucketList(this.mac)
         .then(it => {
           this.submitState = false;
@@ -91,8 +96,8 @@ export default {
         .catch(e => {
           this.submitState = false;
           // 异步验证表单
-          this.resetForm('mac')
-          this.submitForm('mac')
+          this.resetForm("mac");
+          this.submitForm("mac");
         });
     },
     checkLogin() {
