@@ -53,8 +53,8 @@ export default {
   data() {
     return {
       mac: {
-        accessKey: "",
-        secretKey: ""
+        accessKey: "eFU_sK3d8ytJ0PvNSsp0dBTG9Fo8G-GolLi7L1G6",
+        secretKey: "WbiWXJqAS3BQjGG8GyTgLMUi-eUjt6roRjwBL9bJ"
       },
       submitState: false,
       logo: ""
@@ -90,7 +90,7 @@ export default {
               }
             };
             this.$electron.ipcRenderer.send("bucketsList", data);
-            localStorage.obj = JSON.stringify(data);
+            localStorage.mac = JSON.stringify(this.mac);
           }
         })
         .catch(e => {

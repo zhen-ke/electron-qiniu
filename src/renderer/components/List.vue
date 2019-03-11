@@ -58,7 +58,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog
+    <!-- <el-dialog
       :title="title"
       :visible.sync="dialogFormVisible"
       @close="close"
@@ -69,7 +69,7 @@
         :action="action"
         @onData="updateData"
       ></Dialog>
-    </el-dialog>
+    </el-dialog> -->
     <el-dialog
       title="预览"
       :visible.sync="PreviewDialogVisible"
@@ -107,8 +107,6 @@
 import { deleteResource , getList } from "@/service/getData.js";
 import qiniu from "qiniu";
 import { clipboard } from "electron";
-import Dialog from "@/components/Manage/Dialog";
-import Pagination from "@/components/Manage/Pagination";
 import { mapState } from "vuex";
 export default {
   props: {
@@ -117,18 +115,6 @@ export default {
     },
     mac: {
       type: Object
-    },
-    url: {
-      type: String
-    },
-    action: {
-      type: String
-    },
-    postData: {
-      type: Object
-    },
-    url: {
-      type: String
     }
   },
   data() {
@@ -306,10 +292,6 @@ export default {
         this._getData(this.mac,newVal);
       }
     }
-  },
-  components: {
-    Dialog,
-    Pagination
   }
 };
 </script>

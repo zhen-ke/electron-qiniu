@@ -15,19 +15,36 @@
         alt="quit"
       >
     </div>
-    <AddImage class="addimg"></AddImage>
+    <!-- <AddImage class="addimg"></AddImage> -->
+    <UploadImage
+      class="addimg"
+      :url="url"
+      :postData="postData"
+      :action="action"
+    ></UploadImage>
   </div>
 </template>
 
 <script>
-import AddImage from "@/components/AddImage";
-import { logo_white ,quite } from "@/assets/image.js";
+import UploadImage from "@/components/UploadImage";
+import { logo_white, quite } from "@/assets/image.js";
 
 export default {
+  props: {
+    url: {
+      type: String
+    },
+    postData: {
+      type: Object
+    },
+    action: {
+      type: String
+    }
+  },
   data() {
     return {
-      logo: '',
-      quite: ''
+      logo: "",
+      quite: ""
     };
   },
   mounted() {
@@ -36,12 +53,15 @@ export default {
   },
   methods: {
     quit() {
-      localStorage.removeItem("obj");
+      localStorage.removeItem("mac");
       this.$electron.ipcRenderer.send("status", false);
     }
   },
   components: {
-    AddImage
+    UploadImage
+  },
+  watch: {
+    
   }
 };
 </script>

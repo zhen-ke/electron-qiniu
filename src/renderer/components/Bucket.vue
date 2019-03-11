@@ -2,32 +2,23 @@
   <section>
     <el-container>
       <el-header style="-webkit-app-region: drag">
-        <Header />
+        <Header
+          :url="url"
+          :postData="postData"
+          :action="action"
+        />
       </el-header>
       <el-container>
         <el-aside width="200px">
-          <Sidebar
-            :options="options"
-            :mac="mac"
-            :form='form'
-            @onHandleItem="updateHandleItem"
-            @onHandleGetBucket="updateHandleGetBucket"
-          />
+          <CreateBucket />
+          <BucketList @onSwitchBucketList="updateSwitchBucketList" />
         </el-aside>
         <el-main>
-          <div
-            class="bucket"
-            v-if="options.length"
-            style="-webkit-app-region: no-drag"
-          >
-            <List
-              :bucket="value"
-              :mac="mac"
-              :url="url"
-              :postData="postData"
-              :action="action"
-            ></List>
-          </div>
+          <List
+            :bucket="currentBucket"
+            :mac="mac"
+            v-if="bucketList.length"
+          />
         </el-main>
       </el-container>
     </el-container>
@@ -35,24 +26,24 @@
 </template>
 
 <script>
+import qiniu from "qiniu";
+import { mapState } from "vuex";
 import {
   getBucketList,
   deleteBucket,
-  createBucket,
   getBucketDomain
 } from "@/service/getData.js";
-import qiniu from "qiniu";
 import { clipboard } from "electron";
-import List from "@/components/Manage/List";
-import Upload from "@/components/Upload";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
+import Header from "@/components/Header";
+import List from "@/components/List";
+import UploadImage from "@/components/UploadImage";
+import CreateBucket from "@/components/CreateBucket";
+import BucketList from "@/components/BucketList";
+
 export default {
   data() {
     return {
-      mac: {},
-      options: [],
-      value: "",
+      currentBucket: "",
       url: "",
       img: "",
       postData: {
@@ -68,66 +59,23 @@ export default {
     };
   },
   methods: {
-    // Sidebar 切换 Bucket 列表
-    updateHandleItem(item) {
-      this.value = item;
+    updateSwitchBucketList(currentBucket) {
+      this.currentBucket = currentBucket;
     },
-    // Sidebar 删除 Bucket 列表
-    updateHandleGetBucket() {
-      this.getBucket();
+    quit() {
+      localStorage.removeItem("obj");
+      this.$electron.ipcRenderer.send("status", false);
     },
-    getBucket() {
-      getBucketList(this.mac)
-        .then(it => {
-          if (it.data.length) {
-            this.options = it.data;
-            this.value = it.data[0];
-            this.getBucketDomain(this.mac, this.value);
-          }
-        })
-        .catch(e => {
-          this.$message.error("accessKey 或者 secretKey 错误");
-        });
-    },
-    addBucket() {
-      this.addDialogVisible = false;
-      createBucket(this.mac, this.form.name, this.form.region)
-        .then(it => {
-          if (it.status === 200) {
-            this.form.name = "";
-            this.form.region = "";
-            this.$message.success("添加成功");
-            this.getBucket();
-          }
-        })
-        .catch(e => {
-          this.$message.error("添加失败");
-        });
-    },
-
-    // getBuckets(msg) {
-    //   let list = msg || JSON.parse(localStorage.obj || "[]");
-    //   if (list.buckets) {
-    //     this.options = list.buckets;
-    //     // list.buckets.forEach((it, index) => {
-    //     //   let obj = {};
-    //     //   obj["label"] = it;
-    //     //   obj["value"] = it;
-    //     //   this.options.push(obj);
-    //     // });
-    //   } else {
-    //     console.log("没有新建空间");
-    //   }
-    // },
     getBucketDomain(mac, data) {
       console.log(data);
       getBucketDomain(mac, data)
         .then(it => {
+          console.log(it);
           if (it.data.length) {
             this.url = it.data[0];
-            console.log('getBucketList',this.url);
-          }else {
-            console.log('无法获取到域名')
+            console.log("getBucketList", this.url);
+          } else {
+            console.log("无法获取到域名");
           }
         })
         .catch(e => {
@@ -154,50 +102,51 @@ export default {
       var putPolicy = new qiniu.rs.PutPolicy(options);
       return putPolicy.uploadToken(this.mac);
     },
-    // getAccessToken(val) {
-    //   // 获取认证Token
-    //   return qiniu.util.generateAccessToken(
-    //     this.mac,
-    //     "http://api.qiniu.com/v6/domain/list" + "?tbl=" + val
-    //   );
-    // },
     copyText(img) {
       clipboard.writeText(img);
     }
   },
+  computed: {
+    ...mapState(["bucketList", "mac"])
+  },
   mounted() {
-    let login = JSON.parse(localStorage.obj || "null");
-    if (login) {
-      // this.getBuckets(login);
-      this.mac = login.mac;
-      this.getBucket();
-      // this.value = this.options[0];
-      // let value = login.buckets[0];
-      // this.value = value;
-    } else {
-      this.$electron.ipcRenderer.on("msg", (event, files) => {
-        // this.getBuckets(files);
-        this.mac = files.mac;
-        this.getBucket();
-        // this.value = this.options[0];
-        // let value = files.buckets[0];
-        // this.value = value;
+    const mac = JSON.parse(localStorage.mac || "null");
+    if (mac) {
+      this.$store.commit({
+        type: "STORE_MAC",
+        data: mac
       });
+      this.$store.dispatch("getBucketList");
+    } else {
+      // this.$electron.ipcRenderer.on("msg", (event, files) => {
+      //   this.mac = files.mac;
+      //   this.$store.dispatch("getBucketList");
+      // });
     }
   },
   watch: {
-    value(val, oldVal) {
+    currentBucket(val, oldVal) {
       this.postData.token = this.getUploadToken(val);
       // this.AccessToken = this.getAccessToken(val);
       this.getZoneInfo(val);
       this.getBucketDomain(this.mac, val);
+    },
+    url(a,b) {
+      console.log(a,b)
+    },
+    postData(a,b) {
+      console.log(a,b)
+    },
+    action(a,b) {
+      console.log(a,b)
     }
   },
   components: {
     List,
-    Upload,
-    Header,
-    Sidebar
+    UploadImage,
+    CreateBucket,
+    BucketList,
+    Header
   }
 };
 </script>
@@ -219,25 +168,6 @@ export default {
   }
   .el-main {
     padding: 0;
-  }
-}
-.bucket {
-  .bucket-select {
-    margin-bottom: 10px;
-  }
-  .bucket-img {
-    white-space: nowrap;
-    span {
-      color: #ff3e3e;
-    }
-  }
-  .copy {
-    margin-left: 10px;
-    border: 0;
-    padding: 5px 10px;
-    border-radius: 4px;
-    background: #2c9cfb;
-    color: #fff;
   }
 }
 </style>

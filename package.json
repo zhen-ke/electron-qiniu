@@ -54,7 +54,7 @@
     "axios": "^0.16.1",
     "element-ui": "^2.2.2",
     "node-sass": "^4.9.0",
-    "qiniu": "^7.1.1",
+    "qiniu": "^7.2.1",
     "sass-loader": "^7.0.3",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
