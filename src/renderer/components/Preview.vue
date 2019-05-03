@@ -2,7 +2,7 @@
   <el-dialog
     title="预览"
     :visible.sync="visible"
-    width="50%"
+    width="70%"
     class="previewimg"
     @close="handleClose"
   >
