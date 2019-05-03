@@ -11,9 +11,9 @@ export default new Router({
       component: require('@/components/Login').default
     },
     {
-      path: '/bucket',
-      name: 'bucket',
-      component: require('@/components/Bucket').default
+      path: '/layout',
+      name: 'layout',
+      component: require('@/components/Layout').default
     },
     {
       path: '*',

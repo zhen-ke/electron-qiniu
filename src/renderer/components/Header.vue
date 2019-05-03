@@ -6,7 +6,7 @@
         alt="logo"
       >
     </h1>
-    <div
+    <p
       class="quit"
       @click="quit"
     >
@@ -14,14 +14,8 @@
         :src="quite"
         alt="quit"
       >
-    </div>
-    <!-- <AddImage class="addimg"></AddImage> -->
-    <UploadImage
-      class="addimg"
-      :url="url"
-      :postData="postData"
-      :action="action"
-    ></UploadImage>
+    </p>
+    <UploadImage class="addimg"></UploadImage>
   </div>
 </template>
 
@@ -30,43 +24,26 @@ import UploadImage from "@/components/UploadImage";
 import { logo_white, quite } from "@/assets/image.js";
 
 export default {
-  props: {
-    url: {
-      type: String
-    },
-    postData: {
-      type: Object
-    },
-    action: {
-      type: String
-    }
-  },
   data() {
     return {
-      logo: "",
-      quite: ""
+      logo: logo_white,
+      quite: quite
     };
-  },
-  mounted() {
-    this.logo = logo_white;
-    this.quite = quite;
   },
   methods: {
     quit() {
-      localStorage.removeItem("mac");
+      this.$store.dispatch("RemoveToken");
       this.$electron.ipcRenderer.send("status", false);
     }
   },
   components: {
     UploadImage
   },
-  watch: {
-    
-  }
+  watch: {}
 };
 </script>
 
-<style lang="scss" scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
 .header {
   .logo {
     width: 45px;

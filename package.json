@@ -53,15 +53,15 @@
   "dependencies": {
     "axios": "^0.16.1",
     "element-ui": "^2.2.2",
-    "node-sass": "^4.9.0",
     "qiniu": "^7.2.1",
-    "sass-loader": "^7.0.3",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^2.5.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.3",
     "babel-core": "^6.25.0",
     "babel-loader": "^7.1.1",
     "babel-plugin-transform-runtime": "^6.23.0",

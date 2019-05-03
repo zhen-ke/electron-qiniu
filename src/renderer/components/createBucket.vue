@@ -14,7 +14,6 @@
       <el-form
         ref="createBucket"
         :model="form"
-        label-width="110px"
         size="small"
       >
         <el-form-item
@@ -22,7 +21,10 @@
           prop="name"
           :rules="{ required: true, message: '存储空间名称为空', trigger: 'blur' }"
         >
-          <el-input v-model="form.name"  placeholder="请输入存储空间名称"></el-input>
+          <el-input
+            v-model="form.name"
+            placeholder="请输入存储空间名称"
+          ></el-input>
         </el-form-item>
         <el-form-item
           label="存储区域"
@@ -62,9 +64,6 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
-import { createBucket } from "@/service/getData.js";
-
 export default {
   data() {
     return {
@@ -86,7 +85,20 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          this.createBucket();
+          this.$store
+            .dispatch("CreateBucket", {
+              name: this.form.name,
+              region: this.form.region
+            })
+            .then(it => {
+              if (it.status === 200) {
+                this.$message.success("添加成功");
+                this.cancel("createBucket");
+              }
+            })
+            .catch(e => {
+              this.$message.error("添加失败");
+            });
         } else {
           return false;
         }
@@ -96,32 +108,14 @@ export default {
       this.$refs[formName].resetFields();
     },
     cancel(formName) {
-      this.resetForm(formName)
+      this.resetForm(formName);
       this.dialogVisible = false;
-    },
-    createBucket() {
-      this.dialogVisible = false;
-      createBucket(this.mac, this.form.name, this.form.region)
-        .then(it => {
-          if (it.status === 200) {
-            this.form.name = "";
-            this.form.region = "";
-            this.$message.success("添加成功");
-            this.$store.dispatch("getBucketList");
-          }
-        })
-        .catch(e => {
-          this.$message.error("添加失败");
-        });
     }
-  },
-  computed: {
-    ...mapState(["mac"])
   }
 };
 </script>
 
-<style lang="scss" scoped>
+<style rel="stylesheet/scss" lang="scss" scoped>
 .title {
   font-weight: normal;
   font-size: 12px;

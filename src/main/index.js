@@ -19,8 +19,8 @@ const winURL = process.env.NODE_ENV === 'development' ?
   `file://${__dirname}/index.html`
 
 const bucketURL = process.env.NODE_ENV === 'development' ?
-  `http://localhost:9080/#bucket` :
-  `file://${__dirname}/index.html#bucket`
+  `http://localhost:9080/#layout` :
+  `file://${__dirname}/index.html#layout`
 
 function createWindow() {
   /**
