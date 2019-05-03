@@ -1,26 +1,25 @@
-import {
-  app,
-  BrowserWindow,
-  ipcMain,
-  Menu
-} from 'electron'
+import { app, BrowserWindow, ipcMain, Menu } from "electron";
 
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
  */
-if (process.env.NODE_ENV !== 'development') {
-  global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+if (process.env.NODE_ENV !== "development") {
+  global.__static = require("path")
+    .join(__dirname, "/static")
+    .replace(/\\/g, "\\\\");
 }
 
-let mainWindow, bucketWindow
-const winURL = process.env.NODE_ENV === 'development' ?
-  `http://localhost:9080` :
-  `file://${__dirname}/index.html`
+let mainWindow, bucketWindow;
+const winURL =
+  process.env.NODE_ENV === "development"
+    ? `http://localhost:9080`
+    : `file://${__dirname}/index.html`;
 
-const bucketURL = process.env.NODE_ENV === 'development' ?
-  `http://localhost:9080/#layout` :
-  `file://${__dirname}/index.html#layout`
+const bucketURL =
+  process.env.NODE_ENV === "development"
+    ? `http://localhost:9080/#layout`
+    : `file://${__dirname}/index.html#layout`;
 
 function createWindow() {
   /**
@@ -30,38 +29,53 @@ function createWindow() {
     height: 500,
     useContentSize: true,
     width: 350,
-    // titleBarStyle: 'hidden',
-    // resizable: false,
+    titleBarStyle: 'hidden',
+    resizable: false,
     webPreferences: {
       webSecurity: false
     }
-  })
+  });
 
-  mainWindow.loadURL(winURL)
+  mainWindow.loadURL(winURL);
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  })
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+  });
   // Create the Application's main menu
-  var template = [{
-    label: "Application",
-    submenu: [
-      { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
-      { type: "separator" },
-      { label: "Quit", accelerator: "Command+Q", click: function () { app.quit(); } }
-    ]
-  }, {
-    label: "Edit",
-    submenu: [
-      { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-      { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-      { type: "separator" },
-      { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-      { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-      { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-      { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
-    ]
-  }
+  var template = [
+    {
+      label: "Application",
+      submenu: [
+        {
+          label: "About Application",
+          selector: "orderFrontStandardAboutPanel:"
+        },
+        { type: "separator" },
+        {
+          label: "Quit",
+          accelerator: "Command+Q",
+          click: function() {
+            app.quit();
+          }
+        }
+      ]
+    },
+    {
+      label: "Edit",
+      submenu: [
+        { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+        { type: "separator" },
+        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+        {
+          label: "Select All",
+          accelerator: "CmdOrCtrl+A",
+          selector: "selectAll:"
+        }
+      ]
+    }
   ];
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
@@ -75,72 +89,89 @@ function createBucket() {
     useContentSize: true,
     width: 980,
     show: false,
-    // titleBarStyle: 'hidden',
-    // resizable: false,
+    titleBarStyle: 'hidden',
+    resizable: false,
     webPreferences: {
       webSecurity: false
     }
-  })
-  bucketWindow.loadURL(bucketURL)
+  });
+  bucketWindow.loadURL(bucketURL);
 
-  bucketWindow.on('closed', () => {
-    bucketWindow = null
-  })
+  bucketWindow.on("closed", () => {
+    bucketWindow = null;
+  });
   // Create the Application's main menu
-  var template = [{
-    label: "Application",
-    submenu: [
-      { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
-      { type: "separator" },
-      { label: "Quit", accelerator: "Command+Q", click: function () { app.quit(); } }
-    ]
-  }, {
-    label: "Edit",
-    submenu: [
-      { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-      { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-      { type: "separator" },
-      { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-      { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-      { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-      { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
-    ]
-  }
+  var template = [
+    {
+      label: "Application",
+      submenu: [
+        {
+          label: "About Application",
+          selector: "orderFrontStandardAboutPanel:"
+        },
+        { type: "separator" },
+        {
+          label: "Quit",
+          accelerator: "Command+Q",
+          click: function() {
+            app.quit();
+          }
+        }
+      ]
+    },
+    {
+      label: "Edit",
+      submenu: [
+        { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+        { type: "separator" },
+        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+        {
+          label: "Select All",
+          accelerator: "CmdOrCtrl+A",
+          selector: "selectAll:"
+        }
+      ]
+    }
   ];
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
-app.on('ready', () => {
-  createWindow()
-  createBucket()
-})
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
-})
-
-app.on('activate', () => {
-  if (mainWindow === null && bucketWindow === null) {
-    createWindow()
-    createBucket()
-  }
-
-})
-
-ipcMain.on('bucketsList', (evt, data) => {
-  mainWindow.close()
-  bucketWindow.show()
-  bucketWindow.webContents.send('msg', data)
+app.on("ready", () => {
+  createWindow();
+  createBucket();
 });
 
-ipcMain.on('status', (evt, data) => {
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
+});
+
+app.on("activate", () => {
+  if (mainWindow === null && bucketWindow === null) {
+    createWindow();
+    createBucket();
+  }
+});
+
+ipcMain.on("bucketsList", (evt, data) => {
+  mainWindow.hide();
+  bucketWindow.show();
+  bucketWindow.webContents.send("msg", data);
+});
+
+ipcMain.on("status", (evt, data) => {
   if (data) {
-    mainWindow.close()
-    bucketWindow.show()
+    mainWindow.hide();
+    bucketWindow.show();
   } else {
-    app.quit()
+    // app.quit();
+    mainWindow.show();
+    bucketWindow.hide();
+    mainWindow.webContents.send("mainWindow", true);
   }
 });
 /**

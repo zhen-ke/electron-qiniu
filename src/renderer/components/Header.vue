@@ -52,6 +52,7 @@ export default {
       width: 100%;
       height: auto;
       vertical-align: top;
+      margin-top: 8px;
     }
   }
   .quit {

@@ -54,8 +54,8 @@ export default {
   data() {
     return {
       mac: {
-        accessKey: "eFU_sK3d8ytJ0PvNSsp0dBTG9Fo8G-GolLi7L1G6",
-        secretKey: "WbiWXJqAS3BQjGG8GyTgLMUi-eUjt6roRjwBL9bJ"
+        accessKey: "",
+        secretKey: ""
       },
       submitState: false,
       logo: ""
@@ -63,6 +63,11 @@ export default {
   },
   mounted() {
     this.logo = logo;
+    this.$electron.ipcRenderer.on("mainWindow", (event, data) => {
+      if (data) {
+        this.resetForm("mac");
+      }
+    });
   },
   methods: {
     submitForm(formName) {
@@ -83,14 +88,10 @@ export default {
         .then(it => {
           this.submitState = false;
           if (it.data.length) {
-            let data = {
-              buckets: it.data,
-              mac: {
-                accessKey: this.mac.accessKey,
-                secretKey: this.mac.secretKey
-              }
-            };
-            this.$electron.ipcRenderer.send("bucketsList", data);
+            this.$electron.ipcRenderer.send("bucketsList", {
+              accessKey: this.mac.accessKey,
+              secretKey: this.mac.secretKey
+            });
             this.$store.dispatch("SetToken", this.mac);
           }
         })

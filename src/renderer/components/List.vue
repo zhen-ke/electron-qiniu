@@ -10,6 +10,7 @@
       <el-table-column
         prop="key"
         label="文件名"
+        width="200"
         sortable
       >
       </el-table-column>
@@ -32,6 +33,8 @@
       <el-table-column
         label="最后更新"
         width="160"
+        sortable
+        prop="putTime"
       >
         <template slot-scope="scope">
           <i class="el-icon-time"></i>

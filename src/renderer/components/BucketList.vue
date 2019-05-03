@@ -1,8 +1,5 @@
 <template>
-  <el-menu
-    default-active="0"
-    class="el-menu-vertical-demo"
-  >
+  <el-menu default-active="0">
     <el-menu-item
       :index="''+index"
       v-for="(item,index) in bucketList"
@@ -21,6 +18,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { getToken } from "@/utils/common";
 
 export default {
   data() {
@@ -58,7 +56,16 @@ export default {
     ...mapGetters(["bucketList"])
   },
   mounted() {
-    this.$store.dispatch("GetBucket");
+    let login = getToken();
+    if (JSON.stringify(login) == "{}") {
+      this.$electron.ipcRenderer.on("msg", (event, files) => {
+        this.$store.dispatch("SetToken", files).then(it => {
+          this.$store.dispatch("GetBucket");
+        });
+      });
+    } else {
+      this.$store.dispatch("GetBucket");
+    }
   }
 };
 </script>

@@ -38,8 +38,11 @@ const app = {
   },
   actions: {
     SetToken: ({ commit }, data) => {
-      setToken(data);
-      commit("SET_TOKEN", data);
+      return new Promise((resolve, reject) => {
+        setToken(data);
+        commit("SET_TOKEN", data);
+        resolve();
+      });
     },
     RemoveToken: ({ commit }) => {
       removeToken();
