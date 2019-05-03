@@ -1,10 +1,14 @@
 {
   "name": "qiniu",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "'zhen-ke' <cool420984@gmail.com>",
   "description": "electron-vue 七牛客户端",
-  "license": null,
+  "license": "MIT",
   "main": "./dist/electron/main.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:zhen-ke/electron-qiniu.git"
+  },
   "scripts": {
     "build": "node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
@@ -14,10 +18,10 @@
     "pack": "npm run pack:main && npm run pack:renderer",
     "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
     "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-    "postinstall": ""
+    "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "七牛",
+    "productName": "qiniu",
     "appId": "org.simulatedgreg.electron-vue",
     "directories": {
       "output": "build"
