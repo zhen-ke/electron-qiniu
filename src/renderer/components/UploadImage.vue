@@ -7,6 +7,7 @@
     <el-dialog
       title="上传图片"
       :visible.sync="uploadImageVisible"
+      class="upload"
     >
       <el-upload
         class="upload"
@@ -21,6 +22,7 @@
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">
+          拖拽文件或者
           <em>点击上传</em>
         </div>
         <div
