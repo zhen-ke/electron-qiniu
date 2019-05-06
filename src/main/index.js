@@ -1,195 +1,70 @@
+// app：控制应用生命周期的模块
+// BrowserWindow：创建本地浏览器窗口的模块
 import { app, BrowserWindow, ipcMain, Menu } from "electron";
-
-/**
- * Set `__static` path to static files in production
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
- */
-if (process.env.NODE_ENV !== "development") {
-  global.__static = require("path")
-    .join(__dirname, "/static")
-    .replace(/\\/g, "\\\\");
-}
-
-let mainWindow, bucketWindow;
-const winURL =
+import template from "./config/menu";
+// 加载地址
+const loginURL =
   process.env.NODE_ENV === "development"
     ? `http://localhost:9080`
     : `file://${__dirname}/index.html`;
 
-const bucketURL =
+const homeURL =
   process.env.NODE_ENV === "development"
     ? `http://localhost:9080/#layout`
     : `file://${__dirname}/index.html#layout`;
 
-function createWindow() {
-  /**
-   * Initial window options
-   */
-  mainWindow = new BrowserWindow({
-    height: 500,
-    useContentSize: true,
+// 创建新窗口的初始化配置
+let defaultWindowConfig = {
+  useContentSize: true,
+  titleBarStyle: "hidden",
+  resizable: false,
+  webPreferences: {
+    webSecurity: false
+  }
+};
+let mainWin;
+
+function createWindow(config, flag) {
+  // 创建一个新窗口
+  mainWin = new BrowserWindow({
+    ...defaultWindowConfig,
     width: 350,
-    titleBarStyle: 'hidden',
-    resizable: false,
-    webPreferences: {
-      webSecurity: false
-    }
+    height: 500,
+    ...config
   });
-
-  mainWindow.loadURL(winURL);
-
-  mainWindow.on("closed", () => {
-    mainWindow = null;
+  // 在不同模式下加载应用的页面
+  mainWin.loadURL(flag === "home" ? homeURL : loginURL);
+  // 当窗口关闭时调用的方法
+  mainWin.on("closed", () => {
+    mainWin = null;
   });
-  // Create the Application's main menu
-  var template = [
-    {
-      label: "Application",
-      submenu: [
-        {
-          label: "About Application",
-          selector: "orderFrontStandardAboutPanel:"
-        },
-        { type: "separator" },
-        {
-          label: "Quit",
-          accelerator: "Command+Q",
-          click: function() {
-            app.quit();
-          }
-        }
-      ]
-    },
-    {
-      label: "Edit",
-      submenu: [
-        { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-        { type: "separator" },
-        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-        {
-          label: "Select All",
-          accelerator: "CmdOrCtrl+A",
-          selector: "selectAll:"
-        }
-      ]
-    }
-  ];
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 }
 
-function createBucket() {
-  /**
-   * Initial window options
-   */
-  bucketWindow = new BrowserWindow({
-    height: 650,
-    useContentSize: true,
-    width: 980,
-    show: false,
-    titleBarStyle: 'hidden',
-    resizable: false,
-    webPreferences: {
-      webSecurity: false
-    }
-  });
-  bucketWindow.loadURL(bucketURL);
-
-  bucketWindow.on("closed", () => {
-    bucketWindow = null;
-  });
-  // Create the Application's main menu
-  var template = [
-    {
-      label: "Application",
-      submenu: [
-        {
-          label: "About Application",
-          selector: "orderFrontStandardAboutPanel:"
-        },
-        { type: "separator" },
-        {
-          label: "Quit",
-          accelerator: "Command+Q",
-          click: function() {
-            app.quit();
-          }
-        }
-      ]
-    },
-    {
-      label: "Edit",
-      submenu: [
-        { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-        { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-        { type: "separator" },
-        { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-        { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-        {
-          label: "Select All",
-          accelerator: "CmdOrCtrl+A",
-          selector: "selectAll:"
-        }
-      ]
-    }
-  ];
-  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-}
-
+// electron 初始化完成后
 app.on("ready", () => {
   createWindow();
-  createBucket();
 });
-
+// 当所有窗口关闭时退出应用
 app.on("window-all-closed", () => {
+  // 在win下应用会退出，而在macOS下应用不会退出，需要用户手动退出（默认macOS也是这个机制）
   if (process.platform !== "darwin") {
     app.quit();
   }
 });
-
+// 激活窗口
 app.on("activate", () => {
-  if (mainWindow === null && bucketWindow === null) {
+  // 在macOS下应用会重新创建一个新窗口
+  if (mainWin === null) {
     createWindow();
-    createBucket();
   }
 });
-
-ipcMain.on("bucketsList", (evt, data) => {
-  mainWindow.hide();
-  bucketWindow.show();
-  bucketWindow.webContents.send("msg", data);
+// 监听渲染进程发送过来的消息
+ipcMain.on("switchToHome", (evt, data) => {
+  mainWin.destroy();
+  createWindow({ width: 980, height: 650 }, "home");
 });
-
-ipcMain.on("status", (evt, data) => {
-  if (data) {
-    mainWindow.hide();
-    bucketWindow.show();
-  } else {
-    // app.quit();
-    mainWindow.show();
-    bucketWindow.hide();
-    mainWindow.webContents.send("mainWindow", true);
-  }
+ipcMain.on("switchToLogin", (evt, data) => {
+  mainWin.destroy();
+  createWindow({ width: 350, height: 500 }, "login");
 });
-/**
- * Auto Updater
- *
- * Uncomment the following code below and install `electron-updater` to
- * support auto updating. Code Signing with a valid certificate is required.
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
- */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
-})
- */
