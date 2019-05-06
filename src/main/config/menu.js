@@ -1,3 +1,5 @@
+import { app } from "electron";
+
 export default [
   {
     label: "Application",
