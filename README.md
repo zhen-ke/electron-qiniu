@@ -14,47 +14,48 @@
 ### 项目目录
 
 ```
-src
-├── index.ejs
-├── main
-│   ├── index.dev.js
-│   └── index.js
-└── rendererd
-│   ├── App.vue
-│   ├── assets
-│   │   └── logo.png
-│   ├── components
-│   │   ├── AddImage.vue
-│   │   ├── Bucket.vue
-│   │   ├── LandingPage
-│   │   │   └── SystemInformation.vue
-│   │   ├── LandingPage.vue
-│   │   ├── Manage
-│   │   │   ├── Dialog.vue
-│   │   │   ├── List.vue
-│   │   │   ├── Pagination.vue
-│   │   │   └── Search.vue
-│   │   ├── Upload.vue
-│   │   └── login.vue
-│   ├── config
-│   │   └── http.js
-│   ├── main.js
-│   ├── router
-│   │   └── index.js
-│   ├── service
-│   │   ├── api.js
-│   │   └── getData.js
-│   └── store
-│        ├── index.js
-│        └── modules
-│            ├── Counter.js
-│            └── index.js
-static
-└── image
-    ├── data.png
-    ├── logo.png
-    ├── quit.svg
-    └── upload.png
+├── src
+│   ├── index.ejs
+│   ├── main                    // 主进程
+│   │   ├── config              // 主进程相关配置
+│   │   │   └── menu.js
+│   │   ├── index.dev.js        // 主进程核心代码
+│   │   └── index.js
+│   └── renderer                // renderer进程
+│       ├── App.vue
+│       ├── assets              // 静态文件
+│       │   ├── data.png
+│       │   ├── image.js
+│       │   ├── logo-blue.png
+│       │   ├── logo-white.png
+│       │   └── upload.png
+│       ├── components          // 组件
+│       │   ├── BucketList.vue 
+│       │   ├── CreateBucket.vue
+│       │   ├── Header.vue
+│       │   ├── Layout.vue
+│       │   ├── List.vue
+│       │   ├── Login.vue
+│       │   ├── Preview.vue
+│       │   └── UploadImage.vue
+│       ├── main.js
+│       ├── router              // 路由
+│       │   └── index.js
+│       ├── service             // api
+│       │   ├── api.js
+│       │   ├── getData.js
+│       │   └── http.js
+│       ├── store               // vuex
+│       │   ├── getters.js
+│       │   ├── index.js
+│       │   └── modules
+│       │       └── app.js
+│       ├── styles              // 样式
+│       │   ├── element-ui.scss
+│       │   └── index.scss
+│       └── utils               // 公共方法
+│           └── common.js
+└── static
 ```
 
 ### 构建应用
