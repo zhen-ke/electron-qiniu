@@ -33,7 +33,7 @@ export default {
   methods: {
     quit() {
       this.$store.dispatch("RemoveToken");
-      this.$electron.ipcRenderer.send("status", false);
+      this.$electron.ipcRenderer.send("switchToLogin");
     }
   },
   components: {

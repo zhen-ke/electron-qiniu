@@ -93,6 +93,7 @@ export default {
               secretKey: this.mac.secretKey
             });
             this.$store.dispatch("SetToken", this.mac);
+            this.$electron.ipcRenderer.send("switchToHome");
           }
         })
         .catch(e => {
@@ -105,7 +106,7 @@ export default {
     checkLogin() {
       let login = getToken();
       if (JSON.stringify(login) !== "{}") {
-        this.$electron.ipcRenderer.send("status", true);
+        this.$electron.ipcRenderer.send("switchToHome");
       }
     }
   },

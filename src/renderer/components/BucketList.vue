@@ -56,16 +56,7 @@ export default {
     ...mapGetters(["bucketList"])
   },
   mounted() {
-    let login = getToken();
-    if (JSON.stringify(login) == "{}") {
-      this.$electron.ipcRenderer.on("msg", (event, files) => {
-        this.$store.dispatch("SetToken", files).then(it => {
-          this.$store.dispatch("GetBucket");
-        });
-      });
-    } else {
-      this.$store.dispatch("GetBucket");
-    }
+    this.$store.dispatch("GetBucket");
   }
 };
 </script>
