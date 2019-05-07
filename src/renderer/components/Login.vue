@@ -63,11 +63,6 @@ export default {
   },
   mounted() {
     this.logo = logo;
-    this.$electron.ipcRenderer.on("mainWindow", (event, data) => {
-      if (data) {
-        this.resetForm("mac");
-      }
-    });
   },
   methods: {
     submitForm(formName) {
