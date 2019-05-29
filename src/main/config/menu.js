@@ -33,6 +33,7 @@ export default [
   },
   {
     role: "help",
+    label: "开发者工具",
     submenu: [
       { id: "help.toggle-dev-tools", role: "toggledevtools" }
     ]
