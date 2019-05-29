@@ -38,7 +38,7 @@ const app = {
   },
   actions: {
     SetToken: ({ commit }, data) => {
-      return new Promise((resolve, reject) => {
+      return new Promise((resolve) => {
         setToken(data);
         commit("SET_TOKEN", data);
         resolve();
@@ -118,7 +118,7 @@ const app = {
       commit("SWITCH_BUCKET", data);
       dispatch("GetBucket", data);
     },
-    CreateBucket: ({ commit, state, dispatch }, data) => {
+    CreateBucket: ({ state, dispatch }, data) => {
       return new Promise((resolve, reject) => {
         createBucket(state.token, data.name, data.region)
           .then(it => {

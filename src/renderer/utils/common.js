@@ -12,8 +12,8 @@ export function removeToken() {
   return localStorage.removeItem(TokenKey);
 }
 
-export function timetrans(date) {
-  var date = new Date(date); //如果date为13位不需要乘1000
+export function timetrans(oldDate) {
+  var date = new Date(oldDate); //如果date为13位不需要乘1000
   var Y = date.getFullYear() + "-";
   var M =
     (date.getMonth() + 1 < 10

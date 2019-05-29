@@ -68,7 +68,7 @@ export default {
     }
   },
   watch: {
-    previewVisible(newVal, oldVal) {
+    previewVisible(newVal) {
       this.visible = newVal;
     }
   }

@@ -111,10 +111,10 @@ export default {
         .then(() => {
           this.$store
             .dispatch("DeleteBucketListItem", row.key)
-            .then(it => {
+            .then(() => {
               this.$message.success("删除成功");
             })
-            .catch(e => {
+            .catch(() => {
               this.$message.error("删除失败");
             });
         })

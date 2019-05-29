@@ -1,5 +1,4 @@
 import http from "axios";
-import qs from "qs";
 
 // http 配置
 http.defaults.timeout = 10000;

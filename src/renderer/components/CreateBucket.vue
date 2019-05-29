@@ -96,7 +96,7 @@ export default {
                 this.cancel("createBucket");
               }
             })
-            .catch(e => {
+            .catch(() => {
               this.$message.error("添加失败");
             });
         } else {

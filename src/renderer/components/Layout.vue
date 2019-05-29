@@ -20,7 +20,6 @@
 <script>
 import Header from "@/components/Header";
 import List from "@/components/List";
-import UploadImage from "@/components/UploadImage";
 import CreateBucket from "@/components/CreateBucket";
 import BucketList from "@/components/BucketList";
 
@@ -30,7 +29,6 @@ export default {
   },
   components: {
     List,
-    UploadImage,
     CreateBucket,
     BucketList,
     Header

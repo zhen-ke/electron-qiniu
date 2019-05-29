@@ -18,7 +18,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { getToken } from "@/utils/common";
 
 export default {
   data() {
@@ -37,10 +36,10 @@ export default {
         .then(() => {
           this.$store
             .dispatch("DeleteBucket", data)
-            .then(it => {
+            .then(() => {
               this.$message.success("删除成功");
             })
-            .catch(e => {
+            .catch(() => {
               this.$message.error("删除失败");
             });
         })

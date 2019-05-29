@@ -91,7 +91,7 @@ export default {
             this.$electron.ipcRenderer.send("switchToHome");
           }
         })
-        .catch(e => {
+        .catch(() => {
           this.submitState = false;
           // 异步验证表单
           this.resetForm("mac");

@@ -60,11 +60,11 @@ app.on("activate", () => {
   }
 });
 // 监听渲染进程发送过来的消息
-ipcMain.on("switchToHome", (evt, data) => {
+ipcMain.on("switchToHome", () => {
   mainWin.destroy();
   createWindow({ width: 980, height: 650 }, "home");
 });
-ipcMain.on("switchToLogin", (evt, data) => {
+ipcMain.on("switchToLogin", () => {
   mainWin.destroy();
   createWindow({ width: 350, height: 500 }, "login");
 });

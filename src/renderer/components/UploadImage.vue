@@ -62,12 +62,12 @@ export default {
     ...mapGetters(["token", "currentBucket"])
   },
   methods: {
-    handleSuccess(res, file) {
+    handleSuccess() {
       this.uploadImageVisible = false;
       this.$message.success("上传成功");
       this.$store.dispatch("GetList", this.currentBucket);
     },
-    handleError(res) {
+    handleError() {
       this.uploadImageVisible = false;
       this.$message.error("上传失败");
     },
@@ -110,7 +110,7 @@ export default {
     }
   },
   watch: {
-    currentBucket(newVal, oldVal) {
+    currentBucket() {
       this.getUploadAddress();
       this.getUploadToken();
     }
