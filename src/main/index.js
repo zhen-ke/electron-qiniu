@@ -24,7 +24,7 @@ let defaultWindowConfig = {
 };
 let mainWin;
 
-function createWindow(config, flag) {
+function createWindow(config) {
   // 创建一个新窗口
   mainWin = new BrowserWindow({
     ...defaultWindowConfig,
@@ -32,8 +32,8 @@ function createWindow(config, flag) {
     height: 500,
     ...config
   });
-  // 在不同模式下加载应用的页面
-  mainWin.loadURL(flag === "home" ? homeURL : loginURL);
+  // 默认加载登录界面
+  mainWin.loadURL(loginURL);
   // 当窗口关闭时调用的方法
   mainWin.on("closed", () => {
     mainWin = null;
@@ -61,10 +61,11 @@ app.on("activate", () => {
 });
 // 监听渲染进程发送过来的消息
 ipcMain.on("switchToHome", () => {
-  mainWin.hide();
-  createWindow({ width: 980, height: 650 }, "home");
+  mainWin.loadURL(homeURL);
+  mainWin.setContentSize(980, 650);
+  
 });
 ipcMain.on("switchToLogin", () => {
-  mainWin.hide();
-  createWindow({ width: 350, height: 500 }, "login");
+  mainWin.loadURL(loginURL);
+  mainWin.setContentSize(350, 500);
 });
