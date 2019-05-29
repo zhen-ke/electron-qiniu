@@ -58,7 +58,7 @@ const app = {
                 dispatch("GetList", data);
                 dispatch("GetBucketDomain");
               } else {
-                if (it.data.length) {
+                if (it.data && it.data.length) {
                   dispatch("GetList", it.data[0]);
                   dispatch("GetBucketDomain");
                   commit("SWITCH_BUCKET", it.data[0]);

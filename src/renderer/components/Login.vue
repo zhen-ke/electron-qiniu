@@ -80,16 +80,14 @@ export default {
     getBucket() {
       this.submitState = true;
       getBucketList(this.mac)
-        .then(it => {
+        .then(() => {
           this.submitState = false;
-          if (it.data.length) {
             this.$electron.ipcRenderer.send("bucketsList", {
               accessKey: this.mac.accessKey,
               secretKey: this.mac.secretKey
             });
             this.$store.dispatch("SetToken", this.mac);
             this.$electron.ipcRenderer.send("switchToHome");
-          }
         })
         .catch(() => {
           this.submitState = false;
